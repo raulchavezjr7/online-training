@@ -1,0 +1,73 @@
+.nav-link {
+  text-decoration: none;
+  color: inherit;
+  padding-right: 1vw;
+}
+
+.small-menu {
+  display: none;
+
+  @media (max-width: 800px) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: -webkit-fill-available;
+  }
+}
+
+.outlet {
+  height: 88vh;
+  padding-top: 80px;
+  background-color: #f7f9f6;
+  padding-left: 1vw;
+  padding-bottom: 2vh;
+
+  @media (max-width: 600px) {
+    padding-top: 65px;
+  }
+}
+
+.link-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  width: -webkit-fill-available;
+  @media (max-width: 800px) {
+    display: none;
+  }
+}
+.app-brand {
+  display: flex;
+  align-items: center;
+  font-style: oblique;
+  font-kerning: normal;
+  font-weight: 600;
+  gap: 0.5vw;
+  margin: auto;
+}
+.pet-icon {
+  color: #1d94de;
+}
+.app-name {
+  font-size: larger;
+  background-image: linear-gradient(188deg in hsl, #0a4d67 0%, #1d94de);
+  color: transparent;
+  background-clip: text;
+
+  @media (max-width: 800px) {
+    display: none;
+  }
+}
+
+.app-name-small {
+  font-size: larger;
+  background-image: linear-gradient(188deg in hsl, #0a4d67 0%, #1d94de);
+  color: transparent;
+  background-clip: text;
+  display: none;
+
+  @media (max-width: 800px) {
+    display: flex;
+  }
+}
