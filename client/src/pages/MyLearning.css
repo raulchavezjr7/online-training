@@ -1,4 +1,30 @@
-.learning-video{
-    width:75%;
-    height:75%;
+.my-learning-border {
+  background: linear-gradient(0.25turn, #93cddc, #D2F3FC, #93cddc);
+  height: 89vh;
+  width: 80vw;
+  justify-self: right;
+  display: flex;
+  border-radius: 16px;
+  flex-direction: column;
+}
+.my-learning-title {
+  align-self: center;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  color: #0f0f0f;
+}
+.my-learning-buttons {
+  align-self: flex-end;
+  padding-bottom: 3vh;
+  padding-right: 4vw;
+  margin-top: 0.5%;
+  position: relative;
+  @media (max-height: 800px) {
+    display: contents;
+  }
+}
+.divider {
+  width: 0.5vw;
+  height: auto;
+  display: inline-block;
 }

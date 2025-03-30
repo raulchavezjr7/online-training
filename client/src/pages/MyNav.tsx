@@ -10,13 +10,15 @@ import React from "react";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 
 export const MyNav = () => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const [anchorMenu, setAnchorMenu] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorMenu);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorMenu(event.currentTarget);
   };
+
   const handleClose = () => {
-    setAnchorEl(null);
+    setAnchorMenu(null);
   };
 
   return (
@@ -29,32 +31,32 @@ export const MyNav = () => {
             </Button>
             <Menu
               id="basic-menu"
-              anchorEl={anchorEl}
+              anchorEl={anchorMenu}
               open={open}
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>
-                <Link className="nav-link" to="/home">
+                <Link className="nav-link-small" to="/home">
                   Home
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <Link className="nav-link" to="/my-learning">
+                <Link className="nav-link-small" to="/my-learning">
                   My Learning
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <Link className="nav-link" to="/courses">
+                <Link className="nav-link-small" to="/courses">
                   Courses
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <Link className="nav-link" to="/profile">
+                <Link className="nav-link-small" to="/profile">
                   Profile
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <Link className="nav-link" to="/admin">
+                <Link className="nav-link-small" to="/admin">
                   Admin
                 </Link>
               </MenuItem>
