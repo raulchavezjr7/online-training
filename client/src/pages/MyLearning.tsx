@@ -2,22 +2,22 @@ import "./MyLearning.css";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import Button from "@mui/material/Button";
-import { Video } from "../components/video";
+import { Video } from "../components/Video";
 import { Text } from "../components/Text";
 import { styled } from "@mui/material/styles";
 import { useEffect, useState } from "react";
 
 const fileArr = {
   id: 1,
-  title: "Chapter 2: Learning About Dog Breeds",
+  sectionName: "Identifying Small Dog Breeds",
   length: 4,
   content: [
-    { title: "video-2.mp4", type: "video" },
-    { title: "boxer.JPG", type: "text" },
-    { title: "bernese-mountain-dog.JPG", type: "text" },
-    { title: "video-1.mp4", type: "video" },
-    { title: "pug.JPG", type: "text" },
-    { title: "end", type: "end" },
+    { contentTitle: "video-2.mp4", contentType: "video" },
+    { contentTitle: "boxer.JPG", contentType: "text" },
+    { contentTitle: "bernese-mountain-dog.JPG", contentType: "text" },
+    { contentTitle: "video-1.mp4", contentType: "video" },
+    { contentTitle: "pug.JPG", contentType: "text" },
+    { contentTitle: "end", contentType: "end" },
   ],
 };
 
@@ -25,23 +25,21 @@ export const MyLearning = () => {
   const [sectionCounter, setSectionCounter] = useState(0);
   const [contentTitle, setContentTitle] = useState("");
   const [contentType, setContentType] = useState("");
-  const contentLength = fileArr.length
-  const title = fileArr.title
+  const contentLength = fileArr.length;
+  const title = fileArr.sectionName;
 
   useEffect(() => {
-    setContentTitle(fileArr.content[sectionCounter].title)
-    setContentType(fileArr.content[sectionCounter].type)
-
+    setContentTitle(fileArr.content[sectionCounter].contentTitle);
+    setContentType(fileArr.content[sectionCounter].contentType);
   }, [sectionCounter]);
 
   function buttonHandler(buttonType: string) {
-    if(buttonType === "prevButton" ){
+    if (buttonType === "prevButton") {
       setSectionCounter(sectionCounter - 1);
-    }
-    else{
+    } else {
       setSectionCounter(sectionCounter + 1);
     }
-    console.log(sectionCounter)
+    console.log(sectionCounter);
   }
 
   function contentHandler(type: string) {
@@ -58,6 +56,9 @@ export const MyLearning = () => {
   }
   return (
     <>
+      <div className="my-learning-courses-list">
+        <h2>Learning Dog Breeds</h2>
+      </div>
       <div className="my-learning-border">
         <h3 className="my-learning-title">{title}</h3>
         {contentHandler(contentType)}
@@ -73,7 +74,7 @@ export const MyLearning = () => {
           </CustomButton>
           <div className="divider"></div>
           <CustomButton
-          disabled={contentLength === sectionCounter ? true : false}
+            disabled={contentLength === sectionCounter ? true : false}
             endIcon={<ArrowForwardIosRoundedIcon />}
             onClick={() => {
               buttonHandler("nextButton");

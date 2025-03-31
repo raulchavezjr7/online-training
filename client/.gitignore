@@ -13,6 +13,9 @@ dist-ssr
 *.local
 
 #dev test dir
+public/assignment/
+public/course-data/
+public/image/
 public/video/
 
 # Editor directories and files
