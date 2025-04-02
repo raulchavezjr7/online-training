@@ -1,3 +1,16 @@
-.background{
-    height: 89vh;
+.background {
+  height: 89vh;
+  width: -webkit-fill-available;
+  margin-right: 1vw;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  height: 40vh;
+}
+.courses{
+    border-top: solid;
 }

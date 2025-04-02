@@ -46,11 +46,6 @@ export const MyNav = () => {
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <Link className="nav-link-small" to="/courses">
-                  Courses
-                </Link>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
                 <Link className="nav-link-small" to="/profile">
                   Profile
                 </Link>
@@ -78,9 +73,6 @@ export const MyNav = () => {
               </Link>
               <Link className="nav-link" to="/my-learning">
                 My Learning
-              </Link>
-              <Link className="nav-link" to="/courses">
-                Courses
               </Link>
             </div>
             <h3 className="app-brand">
