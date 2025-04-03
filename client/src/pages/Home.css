@@ -2,15 +2,21 @@
   height: 89vh;
   width: -webkit-fill-available;
   margin-right: 1vw;
+  min-height: fit-content;
 }
 
-.buttonContainer {
+.cardContainer {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  height: 40vh;
+  justify-content: space-around;
+  min-height: fit-content;
+  margin-top: 1vh;
+  align-items: stretch;
 }
-.courses{
-    border-top: solid;
+
+.courseType {
+  border-top: solid;
+  border-color: #f59f00;
+  margin-top: 3vh;
+  margin-bottom: 2vh;
 }

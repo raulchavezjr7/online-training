@@ -6,6 +6,7 @@
   display: flex;
   border-radius: 16px;
   flex-direction: column;
+  min-height: fit-content;
 }
 .my-learning-title {
   align-self: center;
@@ -19,9 +20,6 @@
   padding-right: 4vw;
   margin-top: 0.5%;
   position: relative;
-  @media (max-height: 800px) {
-    display: contents;
-  }
 }
 .divider {
   width: 0.5vw;

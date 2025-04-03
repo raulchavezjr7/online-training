@@ -1,11 +1,13 @@
 .nav-link {
   text-decoration: none;
   color: inherit;
-  padding-right: 1vw;
+  margin-right: 1vw;
+  padding: 1vh;
 }
 
 .nav-link:hover {
-  color: #868484;
+  background-color: #0f0f0f15;
+  border-radius: 10px;
 }
 
 .nav-link-small {

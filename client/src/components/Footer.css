@@ -1,5 +1,35 @@
 .footer {
-    width: 99vw;
-    color: #f7f9f6;
-    background-color: #3d3d3d;
+  color: #f7f9f6;
+  background-color: #3d3d3d;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1vh;
+}
+.contact-info {
+  display: flex;
+  margin-bottom: 3vh;
+  color: #f7f9f6;
+  margin-top: 1vh;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  gap: 0.5vw;
+  @media screen and (max-width: 800px) {
+    gap: 1vw;
   }
+}
+.sections {
+  margin-top: 2vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+}

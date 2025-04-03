@@ -12,8 +12,8 @@ const fileArr = {
   sectionName: "Identifying Small Dog Breeds",
   length: 4,
   content: [
-    { contentTitle: "video-2.mp4", contentType: "video" },
-    { contentTitle: "boxer.JPG", contentType: "text" },
+    { contentTitle: "working-group-boxer-vid.mp4", contentType: "video" },
+    { contentTitle: "working-group-boxer-image.JPG", contentType: "text" },
     { contentTitle: "bernese-mountain-dog.JPG", contentType: "text" },
     { contentTitle: "video-1.mp4", contentType: "video" },
     { contentTitle: "pug.JPG", contentType: "text" },
