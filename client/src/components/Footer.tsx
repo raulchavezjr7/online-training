@@ -7,6 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import MUILink from "@mui/material/Link";
 
 export const Footer = () => {
   return (
@@ -56,6 +57,29 @@ export const Footer = () => {
         <div>Email: contact@example.com</div>
         {" | "}
         <div>Phone: (555) 123-4567</div>
+      </div>
+      <div className="copyright">
+        <div>© Copyright 2025 Raul Chavez Jr.</div>
+        <div>
+          Images and videos by{" "}
+          <MUILink
+            href="https://www.freepik.com"
+            underline="hover"
+            target="_blank"
+            rel="noopener"
+          >
+            freepik
+          </MUILink>{" "}
+          and{" "}
+          <MUILink
+            href="https://pixabay.com/"
+            underline="hover"
+            target="_blank"
+            rel="noopener"
+          >
+            pixabay
+          </MUILink>
+        </div>
       </div>
     </div>
   );

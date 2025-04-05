@@ -40,9 +40,23 @@ export const MyNav = () => {
             </Link>
           </div>
         </h3>
+        <CustomButton>Sign In</CustomButton>
       </div>
     ) : (
       <div className="small-menu">
+        <h3 className="app-brand">
+          <div>
+            <PetsRoundedIcon
+              className="pet-icon"
+              style={{ fontSize: "xx-large" }}
+            />
+          </div>
+          <div className="app-name-small">
+            <Link className="nav-link" to="./home">
+              VTA
+            </Link>
+          </div>
+        </h3>
         <Button aria-haspopup="true" onClick={handleClick}>
           <MenuRoundedIcon
             style={{ fontSize: "xx-large" }}
@@ -76,19 +90,6 @@ export const MyNav = () => {
             </Link>
           </MenuItem>
         </Menu>
-        <h3 className="app-brand">
-          <div>
-            <PetsRoundedIcon
-              className="pet-icon"
-              style={{ fontSize: "xx-large" }}
-            />
-          </div>
-          <div className="app-name-small">
-            <Link className="nav-link" to="./home">
-              VTA
-            </Link>
-          </div>
-        </h3>
       </div>
     );
   };
@@ -109,17 +110,11 @@ export const MyNav = () => {
             </Link>
           </div>
         </h3>
+
+        <CustomButton>Sign In</CustomButton>
       </div>
     ) : (
       <div className="link-container">
-        <div>
-          <CustomButton component={Link} to="/home">
-            Home
-          </CustomButton>
-          <CustomButton component={Link} to="/my-learning">
-            My Learning
-          </CustomButton>
-        </div>
         <h3 className="app-brand">
           <div>
             <PetsRoundedIcon
@@ -133,6 +128,14 @@ export const MyNav = () => {
             </Link>
           </div>
         </h3>
+        <div>
+          <CustomButton component={Link} to="/home">
+            Home
+          </CustomButton>
+          <CustomButton component={Link} to="/my-learning">
+            My Learning
+          </CustomButton>
+        </div>
         <div>
           <CustomButton component={Link} to="/profile">
             Profile

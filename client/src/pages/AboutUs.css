@@ -1,17 +1,21 @@
-.background {
-  height: 89vh;
+.aboutUsBackground {
+  height: 91vh;
   width: -webkit-fill-available;
   margin-right: 1vw;
   min-height: fit-content;
+  padding-left: 1vw;
+  margin-left: 1vw;
+  padding-top: 2vh;
   @media screen and (max-width: 900px) {
     background: linear-gradient(
-        rgba(255, 255, 255, 0.7),
-        rgba(255, 255, 255, 0.7)
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.1)
       ),
-      url("../background-image/about-us-image-4.jpg");
+      url("../background-image/about-us-image-5.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    border-radius: 10px;
     position: relative;
     font-size: large;
     font-weight: 600;

@@ -18,7 +18,7 @@ export const FAQ = () => {
   }, []);
 
   return (
-    <div className="background">
+    <div className="faqBackground">
       <h3>Frequently Asked Questions (FAQ)</h3>
       {faq.map((element, i) => {
         const question = element.question;

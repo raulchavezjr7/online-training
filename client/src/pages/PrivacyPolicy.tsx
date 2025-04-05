@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export const PrivacyPolicy = () => {
   return (
-    <div className="background">
+    <div className="privacyBackground">
       <div className="header-button-container">
         <div>
           <h3>Privacy Policy for VetTech Academy</h3>

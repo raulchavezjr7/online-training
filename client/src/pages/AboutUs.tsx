@@ -11,7 +11,7 @@ export const AboutUs = () => {
     justifyContent: "center",
     flexDirection: "column",
     "@media screen and (max-width: 900px)": {
-      background: "linear-gradient(transparent, transparent)",
+      backgroundColor: "#f7f9f6",
     },
   };
   const textCardContent = {
@@ -41,7 +41,7 @@ export const AboutUs = () => {
   };
 
   return (
-    <div className="background">
+    <div className="aboutUsBackground">
       <Grid
         container
         rowSpacing={1}
@@ -224,9 +224,11 @@ export const AboutUs = () => {
         </Grid>
         <Grid size={{ xs: 11, md: 7 }} sx={gridText}>
           <h3>Get Started Today!</h3>
-          Ready to take your clinic’s training program to the next level?
-          Contact us today to learn more about how VetTech Academy can help your
-          veterinary technicians grow and succeed.
+          <p style={{marginBottom: "1vh"}}>
+            Ready to take your clinic’s training program to the next level?
+            Contact us today to learn more about how VetTech Academy can help
+            your veterinary technicians grow and succeed.
+          </p>
         </Grid>
       </Grid>
     </div>

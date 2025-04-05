@@ -31,7 +31,7 @@ export const Home = () => {
   }, []);
 
   return (
-    <div className="background">
+    <div className="homeBackground">
       <Typography variant="h3">Welcome Back .... </Typography>
       <h2 className="courseType">My Courses</h2>
       <div className="cardContainer">

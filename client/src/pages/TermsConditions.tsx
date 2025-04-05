@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export const TermsConditions = () => {
   return (
-    <div className="background">
+    <div className="termsBackground">
       <div className="header-button-container">
         <div>
           <h3>Terms and Conditions for VetTech Academy</h3>

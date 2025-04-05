@@ -29,14 +29,14 @@
 
 .outlet {
   height: auto;
-  padding-top: 80px;
+  padding-top: 64px;
   background-color: #f7f9f6;
-  padding-left: 1vw;
+  /* padding-left: 1vw; */
   padding-bottom: 2vh;
   display: flex;
 
   @media (max-width: 600px) {
-    padding-top: 65px;
+    padding-top: 56px;
   }
 }
 
@@ -56,8 +56,8 @@
   font-style: oblique;
   font-kerning: normal;
   font-weight: 600;
-  gap: 0.5vw;
   margin: auto;
+  margin-left: 0px;
 }
 .pet-icon {
   color: #1b89ce;

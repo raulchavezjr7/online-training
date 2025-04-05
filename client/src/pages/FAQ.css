@@ -1,8 +1,10 @@
-.background {
-  height: 89vh;
+.faqBackground {
+  height: 91vh;
   width: -webkit-fill-available;
   margin-right: 1vw;
   min-height: fit-content;
+  padding-left: 1vw;
+  padding-top: 2vh;
 }
 h3 {
   margin-bottom: 1vh;
