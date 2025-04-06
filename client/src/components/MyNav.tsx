@@ -6,15 +6,36 @@ import PetsRoundedIcon from "@mui/icons-material/PetsRounded";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import { styled } from "@mui/material/styles";
 
-export const MyNav = () => {
+export const MyNav = ({ user }: { user: number }) => {
   const [anchorMenu, setAnchorMenu] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorMenu);
   const location = useLocation();
-  const showNav = location.pathname === "/" || location.pathname === "/sign-in";
+  const showNav =
+    location.pathname === "/" || location.pathname.includes("/sign-in");
+  const [userData, setUserData] = useState({
+    id: -1,
+    email: "",
+    name: "",
+    company: "",
+    supervisor: false,
+    assignedCourses: [""],
+    completedCourses: [""],
+    currentCourses: [{ courseName: "", chapterName: "", sectionName: "" }],
+  });
+
+  useEffect(() => {
+    fetch("./course-data/users.json")
+      .then((res) => res.json())
+      .then((data) => {
+        if (user !== -1) {
+          setUserData(data[user]);
+        }
+      });
+  }, [user]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorMenu(event.currentTarget);
@@ -40,7 +61,13 @@ export const MyNav = () => {
             </Link>
           </div>
         </h3>
-        <CustomButton>Sign In</CustomButton>
+        {location.pathname.includes("sign-in") ? (
+          <></>
+        ) : (
+          <CustomButton component={Link} to="/sign-in">
+            Sign In
+          </CustomButton>
+        )}
       </div>
     ) : (
       <div className="small-menu">
@@ -84,11 +111,15 @@ export const MyNav = () => {
               Profile
             </Link>
           </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <Link className="nav-link-small" to="/admin">
-              Admin
-            </Link>
-          </MenuItem>
+          {userData.supervisor ? (
+            <MenuItem onClick={handleClose}>
+              <Link className="nav-link-small" to="/team-dashboard">
+                Team Dashboard
+              </Link>
+            </MenuItem>
+          ) : (
+            <span style={{ display: "none" }}></span>
+          )}
         </Menu>
       </div>
     );
@@ -110,8 +141,13 @@ export const MyNav = () => {
             </Link>
           </div>
         </h3>
-
-        <CustomButton>Sign In</CustomButton>
+        {location.pathname.includes("sign-in") ? (
+          <></>
+        ) : (
+          <CustomButton component={Link} to="/sign-in">
+            Sign In
+          </CustomButton>
+        )}
       </div>
     ) : (
       <div className="link-container">
@@ -135,13 +171,18 @@ export const MyNav = () => {
           <CustomButton component={Link} to="/my-learning">
             My Learning
           </CustomButton>
-        </div>
-        <div>
           <CustomButton component={Link} to="/profile">
             Profile
           </CustomButton>
-          <CustomButton component={Link} to="/admin">
-            Admin
+          {userData.supervisor ? (
+            <CustomButton component={Link} to="/team-dashboard">
+              Team Dashboard
+            </CustomButton>
+          ) : (
+            <></>
+          )}
+          <CustomButton component={Link} to="/sign-in">
+            Sign In
           </CustomButton>
         </div>
       </div>
@@ -157,7 +198,7 @@ export const MyNav = () => {
         </Toolbar>
       </AppBar>
       <div className="outlet">
-        <Outlet />
+        <Outlet context={userData} />
       </div>
     </>
   );

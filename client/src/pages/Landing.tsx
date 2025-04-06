@@ -60,7 +60,13 @@ export const Landing = () => {
               </Stack>
             </Container>
           </Grid>
-          <Grid size={{ xs: 11, md: 5 }}>
+          <Grid
+            size={{ xs: 11, md: 5 }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             <Container
               sx={{
                 marginLeft: "0px",
@@ -99,10 +105,10 @@ export const Landing = () => {
           >
             <Card sx={{ height: "100%" }}>
               <CardContent>
-                <Typography variant="h6" sx={{ marginBottom: "1vh" }}>
+                <Typography variant="h5" sx={{ marginBottom: "1vh" }}>
                   Why Choose VetTech Academy?
                 </Typography>
-                <Typography variant="body1">
+                <Typography variant="subtitle1">
                   VetTech Academy is the go-to platform for veterinary clinics
                   that want to enhance their technicians/Assistant's skills. We
                   provide a library of practical, on-demand resources designed
@@ -141,10 +147,10 @@ export const Landing = () => {
           >
             <Card sx={{ height: "100%" }}>
               <CardContent>
-                <Typography variant="h6" sx={{ marginBottom: "1vh" }}>
+                <Typography variant="h5" sx={{ marginBottom: "1vh" }}>
                   Key Features
                 </Typography>
-                <Typography variant="body1">
+                <Typography variant="subtitle1">
                   <ul>
                     <li>
                       Easy-to-Understand Content
@@ -200,10 +206,10 @@ export const Landing = () => {
           >
             <Card sx={{ height: "100%" }}>
               <CardContent>
-                <Typography variant="h6" sx={{ marginBottom: "1vh" }}>
+                <Typography variant="h5" sx={{ marginBottom: "1vh" }}>
                   How It Works
                 </Typography>
-                <Typography variant="body1"></Typography>
+                <Typography variant="subtitle1"></Typography>
                 <ol>
                   <li>
                     Sign Up – Register your clinic and gain access to our full

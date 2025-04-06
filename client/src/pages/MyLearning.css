@@ -4,28 +4,9 @@
   min-height: fit-content;
   padding-left: 1vw;
   padding-top: 2vh;
-  /* display: flex; */
-}
-.my-learning-border {
-  background: linear-gradient(0.25turn, #93cddc, #bdedfa, #93cddc);
-  height: 89vh;
-  width: 80vw;
-  justify-self: right;
-  display: flex;
-  border-radius: 16px;
-  flex-direction: column;
-  min-height: fit-content;
-}
-.my-learning-title {
-  align-self: center;
-  margin-top: 1vh;
-  margin-bottom: 1vh;
-  color: #0f0f0f;
 }
 .my-learning-buttons {
   align-self: flex-end;
-  /* padding-bottom: 3vh; */
-  /* padding-right: 4vw; */
   padding-bottom: 1vh;
   padding-right: 1vw;
   margin-top: 0.5%;
@@ -36,7 +17,3 @@
   height: auto;
   display: inline-block;
 }
-/* .my-learning-courses-list {
-  height: 89vh;
-  width: 20vw;
-} */
