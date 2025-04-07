@@ -10,7 +10,7 @@ export const AboutUs = () => {
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",
-    "@media screen and (max-width: 900px)": {
+    "@media only screen and (max-width: 900px)": {
       backgroundColor: "#f7f9f6",
     },
   };

@@ -27,10 +27,8 @@ export const FAQ = () => {
           <Accordion
           key={i}
             style={{
-              borderBottomWidth: "0.5px",
-              borderBottom: "Solid",
               borderBottomColor: "#9E9E9E",
-              boxShadow: "1px 3px 1px #9E9E9E",
+              boxShadow: "1px 3px 6px #9e9e9ebf",
             }}
           >
             <AccordionSummary

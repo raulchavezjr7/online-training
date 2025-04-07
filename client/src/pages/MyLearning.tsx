@@ -17,8 +17,12 @@ import {
 import { Typography } from "@mui/material";
 import { SimpleTreeView } from "@mui/x-tree-view/SimpleTreeView";
 import { TreeItem } from "@mui/x-tree-view/TreeItem";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 export const MyLearning = () => {
+  const userData: UserContext = useOutletContext();
   const [course, setCourse] = useState<CourseContext>({
     id: 0,
     courseName: "",
@@ -48,8 +52,8 @@ export const MyLearning = () => {
   const [mediaType, setMediaType] = useState("image");
   const [mediaLength, setMediaLength] = useState(1);
   const [currentLength, setCurrentLength] = useState(1);
-
-  const userData: UserContext = useOutletContext();
+  const [selectedSection, setSelectedSection] = useState("");
+  const [selectedChapter, setSelectedChapter] = useState("");
 
   useEffect(() => {
     fetch("./course-data/courses.json")
@@ -130,30 +134,105 @@ export const MyLearning = () => {
     }
   }, [content, currentLength]);
 
+  useEffect(() => {
+    setSelectedSection(userData.currentCourse.sectionName);
+    setSelectedChapter(userData.currentCourse.chapterName);
+  }, [userData]);
+
   function buttonHandler(buttonType: string) {
     if (buttonType === "nextButton") {
       setCurrentLength(currentLength + 1);
     } else {
       setCurrentLength(currentLength - 1);
     }
-    console.log("course");
-    console.log(course);
-    console.log("chapters");
-    console.log(chapters);
-    console.log("section");
-    console.log(section);
-    console.log("content");
-    console.log(content);
-    console.log("mediaTitle");
-    console.log(mediaTitle);
-    console.log("mediaType");
-    console.log(mediaType);
-    console.log("mediaLength");
-    console.log(mediaLength);
-    console.log("currentLength");
-    console.log(currentLength);
-    console.log("userData");
-    console.log(userData);
+  }
+
+  function handleTreeClickChapter(element: string) {
+    setSelectedChapter(element);
+  }
+
+  function handleTreeClick(element: string) {
+    setSelectedSection(element);
+    let contentChanged = false;
+    setCurrentLength(1);
+    chapters.map((chapterElement) => {
+      chapterElement.sections.map((sectionElement) => {
+        if (sectionElement.sectionName === element) {
+          setSelectedChapter(chapterElement.chapterName);
+        }
+      });
+    });
+    section.map((sectionElement) => {
+      if (sectionElement.sectionName === element) {
+        contentChanged = true;
+        setContent(sectionElement.content);
+        setMediaLength(sectionElement.length);
+      }
+    });
+    if (!contentChanged) {
+      setContent([{ contentTitle: "not-found-content", contentType: "png" }]);
+      setMediaLength(1);
+    }
+  }
+
+  function treeView() {
+    let chapterIsDisabled = false;
+    const disableChapters = [];
+    let sectionIsDisabled = false;
+    const disableSection = [];
+
+    return chapters.map((chapterElement) => {
+      if (chapterIsDisabled) {
+        disableChapters.push(chapterElement.chapterName);
+      }
+      if (chapterElement.chapterName === userData.currentCourse.chapterName) {
+        chapterIsDisabled = true;
+      }
+      return (
+        <TreeItem
+          key={chapterElement.id}
+          disabled={disableChapters.length !== 0 ? true : false}
+          itemId={chapterElement.chapterName}
+          label={chapterElement.chapterName}
+          onClick={
+            disableChapters.length !== 0
+              ? () => {}
+              : (e) => {
+                  const element = e.target as HTMLElement;
+                  handleTreeClickChapter(element.innerText);
+                }
+          }
+        >
+          {chapterElement.sections.map((sectionElement) => {
+            if (sectionIsDisabled) {
+              disableSection.push(sectionElement.sectionName);
+            }
+            if (
+              sectionElement.sectionName === userData.currentCourse.sectionName
+            ) {
+              sectionIsDisabled = true;
+            }
+            return (
+              <TreeItem
+                disabled={disableSection.length !== 0 ? true : false}
+                onClick={
+                  disableSection.length !== 0
+                    ? () => {}
+                    : (e) => {
+                        const element = e.target as HTMLElement;
+                        handleTreeClick(element.innerText);
+                      }
+                }
+                id={chapterElement.chapterName}
+                key={sectionElement.sectionName}
+                itemId={sectionElement.sectionName}
+                label={sectionElement.sectionName}
+              />
+            );
+          })}
+        </TreeItem>
+      );
+    });
   }
 
   return (
@@ -163,7 +242,7 @@ export const MyLearning = () => {
         rowSpacing={1}
         sx={{
           justifyContent: "center",
-          "@media screen and (min-width: 900px)": {
+          "@media only screen and (min-width: 900px)": {
             justifyContent: "space-around",
           },
         }}
@@ -171,37 +250,28 @@ export const MyLearning = () => {
         <Grid
           size={{ xs: 11, md: 3 }}
           sx={{
-            "@media screen and (max-width: 900px)": {
+            "@media only screen and (max-width: 900px)": {
               display: "none",
             },
           }}
         >
-          <SimpleTreeView>
-            <TreeItem itemId="grid" label="Data Grid">
-              <TreeItem itemId="grid-community" label="@mui/x-data-grid" />
-              <TreeItem itemId="grid-pro" label="@mui/x-data-grid-pro" />
-              <TreeItem
-                itemId="grid-premium"
-                label="@mui/x-data-grid-premium"
-              />
-            </TreeItem>
-            <TreeItem itemId="pickers" label="Date and Time Pickers">
-              <TreeItem
-                itemId="pickers-community"
-                label="@mui/x-date-pickers"
-              />
-              <TreeItem itemId="pickers-pro" label="@mui/x-date-pickers-pro" />
-            </TreeItem>
-            <TreeItem itemId="charts" label="Charts">
-              <TreeItem
-                itemId="charts-community"
-                label="@mui/x-charts"
-                disabled
-              />
-            </TreeItem>
-            <TreeItem itemId="tree-view" label="Tree View" disabled>
-              <TreeItem itemId="tree-view-community" label="@mui/x-tree-view" />
-            </TreeItem>
+          <SimpleTreeView
+            expandedItems={[selectedChapter]}
+            selectedItems={selectedSection}
+            disableSelection
+            slots={{
+              expandIcon: AddCircleOutlineIcon,
+              collapseIcon: RemoveCircleOutlineIcon,
+              endIcon: RemoveIcon,
+            }}
+            sx={{
+              paddingRight: "1vw",
+              "& .MuiTreeItem-content.Mui-selected ": {
+                backgroundColor: "rgb(197 227 99 / 50%)",
+              },
+            }}
+          >
+            {treeView()}
           </SimpleTreeView>
         </Grid>
         <Grid size={{ xs: 11, md: 9 }}>
@@ -216,11 +286,10 @@ export const MyLearning = () => {
               padding: "0px 1vw",
               background:
                 "linear-gradient(0.25turn, #93cddc, #bdedfa, #93cddc)",
+              boxShadow: "1px 3px 6px #9e9e9ebf",
             }}
           >
-            <Typography variant="h4">
-              {userData.currentCourse.sectionName}
-            </Typography>
+            <Typography variant="h4">{selectedSection}</Typography>
             {mediaType === "image" ? (
               <CardMedia
                 component="img"
@@ -286,12 +355,29 @@ export const MyLearning = () => {
         <Grid
           size={{ xs: 11, md: 3 }}
           sx={{
-            "@media screen and (min-width: 900px)": {
+            "@media only screen and (min-width: 900px)": {
               display: "none",
             },
           }}
         >
-          test
+          <SimpleTreeView
+            expandedItems={[selectedChapter]}
+            selectedItems={selectedSection}
+            disableSelection
+            slots={{
+              expandIcon: AddCircleOutlineIcon,
+              collapseIcon: RemoveCircleOutlineIcon,
+              endIcon: RemoveIcon,
+            }}
+            sx={{
+              paddingRight: "1vw",
+              "& .MuiTreeItem-content.Mui-selected ": {
+                backgroundColor: "rgb(197 227 99 / 50%)",
+              },
+            }}
+          >
+            {treeView()}
+          </SimpleTreeView>
         </Grid>
       </Grid>
     </div>
@@ -304,6 +390,7 @@ const CustomButton = styled(Button)({
   variant: "contained",
   fontSize: "large",
   fontFamily: "Inter, sans-serif",
+  boxShadow: "1px 2px 1px 0px #00000069",
   "&:hover": {
     backgroundColor: "#bd7d07",
   },

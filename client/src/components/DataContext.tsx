@@ -4,8 +4,8 @@ export interface UserContext {
   name: string;
   company: string;
   supervisor: boolean;
-  assignedCourses: string;
-  completedCourses: string;
+  assignedCourses: string[];
+  completedCourses: string[];
   currentCourse: {
     courseName: string;
     chapterName: string;

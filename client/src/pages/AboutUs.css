@@ -6,7 +6,7 @@
   padding-left: 1vw;
   margin-left: 1vw;
   padding-top: 2vh;
-  @media screen and (max-width: 900px) {
+  @media only screen and (max-width: 900px) {
     background: linear-gradient(
         rgba(255, 255, 255, 0.1),
         rgba(255, 255, 255, 0.1)
@@ -22,7 +22,7 @@
   }
 }
 .gridImage {
-  @media screen and (max-width: 900px) {
+  @media only screen and (max-width: 900px) {
     display: none;
   }
 }

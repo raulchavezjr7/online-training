@@ -19,7 +19,7 @@
 .small-menu {
   display: none;
 
-  @media (max-width: 800px) {
+  @media only screen and (max-width: 800px) {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -35,7 +35,7 @@
   padding-bottom: 2vh;
   display: flex;
 
-  @media (max-width: 600px) {
+  @media only screen and (max-width: 600px) {
     padding-top: 56px;
   }
 }
@@ -46,7 +46,7 @@
   justify-content: space-between;
   align-items: center;
   width: -webkit-fill-available;
-  @media (max-width: 800px) {
+  @media only screen and (max-width: 800px) {
     display: none;
   }
 }
@@ -65,11 +65,8 @@
 .app-name {
   font-size: larger;
   color: #0f0f0f;
-  /* background-image: linear-gradient(188deg in hsl, #0a4d67 0%, #1d94de);
-  color: transparent;
-  background-clip: text; */
 
-  @media (max-width: 800px) {
+  @media only screen and  (max-width: 800px) {
     display: none;
   }
 }
@@ -77,12 +74,9 @@
 .app-name-small {
   font-size: larger;
   color: #0f0f0f;
-  /* background: linear-gradient(188deg in hsl, #0a4d67 0%, #1d94de);
-  color: transparent;
-  background-clip: text; */
   display: none;
 
-  @media (max-width: 800px) {
+  @media only screen and (max-width: 800px) {
     display: flex;
   }
 }

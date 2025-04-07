@@ -10,10 +10,14 @@
 .cardContainer {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: start;
   min-height: fit-content;
   margin-top: 1vh;
   align-items: stretch;
+  gap: 2vh;
+  @media only screen and (max-width: 900px) {
+    justify-content: space-evenly;
+  }
 }
 
 .courseType {
