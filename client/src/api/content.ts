@@ -15,7 +15,7 @@ export interface Sections {
     id: number;
     sectionName: string;
     length: number;
-    content: [{ contentTitle: string; contentType: string, itemPathS3: string }];
+    content: [{ contentTitle: string; contentType: string, itemPathS3: string }]; 
 }
 
 const API_URL = import.meta.env.VITE_AWS_API_ASSETS;
