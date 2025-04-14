@@ -18,6 +18,7 @@ public/course-data/
 public/image/
 public/video/
 public/background-image/
+.env
 
 # Editor directories and files
 .vscode/*

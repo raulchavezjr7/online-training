@@ -38,5 +38,5 @@ export interface SectionContext {
   id: number;
   sectionName: string;
   length: number;
-  content: [{ contentTitle: string; contentType: string }];
+  content: [{ contentTitle: string; contentType: string, itemPathS3: string }];
 }

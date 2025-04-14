@@ -5,6 +5,7 @@ import "./Profile.css";
 import { useOutletContext } from "react-router-dom";
 import { UserContext } from "../components/DataContext";
 import Grid from "@mui/material/Grid";
+import { styled } from "@mui/material/styles";
 
 export const Profile = () => {
   const userData: UserContext = useOutletContext();
@@ -15,7 +16,7 @@ export const Profile = () => {
           boxShadow: "1px 3px 6px #9e9e9ebf",
           height: "fit-content",
           width: "50vw",
-          backgroundColor: "rgb(29 148 222 / 20%)",
+          backgroundColor: "#1b89ce82",
           padding: "2vh 1vw",
           "@media only screen and (max-width: 1300px)": {
             width: "65vw",
@@ -35,7 +36,7 @@ export const Profile = () => {
         >
           <Grid container rowSpacing={3} columnSpacing={3} sx={{}}>
             <Grid size={{ xs: 11, md: 6 }}>
-              <TextField
+              <CustomTextField
                 id="Name"
                 label="Name"
                 defaultValue={userData.name}
@@ -124,3 +125,26 @@ export const Profile = () => {
     </div>
   );
 };
+
+const CustomTextField = styled(TextField)({
+  label: {
+    color: "#212121",
+  },
+  "& label.Mui-focused": {
+    color: "green",
+  },
+  // focused color for input with variant='standard'
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "green"
+  },
+  // focused color for input with variant='filled'
+  "& .MuiFilledInput-underline:after": {
+    borderBottomColor: "green"
+  },
+  // focused color for input with variant='outlined'
+  "& .MuiOutlinedInput-root": {
+    "&.Mui-focused fieldset": {
+      borderColor: "green"
+    }
+  }
+}) as typeof TextField;

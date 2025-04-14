@@ -8,22 +8,19 @@ import Grid from "@mui/material/Grid";
 import CardMedia from "@mui/material/CardMedia";
 import Card from "@mui/material/Card";
 import { useOutletContext } from "react-router-dom";
-import {
-  UserContext,
-  CourseContext,
-  ChapterContext,
-  SectionContext,
-} from "../components/DataContext";
-import { Typography } from "@mui/material";
+import { UserContext } from "../components/DataContext";
+import { CircularProgress, Stack, Typography } from "@mui/material";
 import { SimpleTreeView } from "@mui/x-tree-view/SimpleTreeView";
 import { TreeItem } from "@mui/x-tree-view/TreeItem";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { Courses, Chapters, Sections, getAllCourses } from "../api/content";
 
-export const MyLearning = () => {
+export const MyLearning = ({ propCourse }: { propCourse: "" }) => {
   const userData: UserContext = useOutletContext();
-  const [course, setCourse] = useState<CourseContext>({
+  const [isLoading, setIsLoading] = useState(true);
+  const [course, setCourse] = useState<Courses>({
     id: 0,
     courseName: "",
     length: 0,
@@ -33,16 +30,21 @@ export const MyLearning = () => {
         chapterName: "",
         chapterLength: 0,
       },
-      { chapterName: "", chapterLength: 0 },
     ],
   });
-  const [chapters, setChapters] = useState<Array<ChapterContext>>([]);
-  const [section, setSection] = useState([
+  const [chapters, setChapters] = useState<Chapters[]>([]);
+  const [section, setSection] = useState<Sections[]>([
     {
       id: 1000000,
       sectionName: "content not found",
       length: 1,
-      content: [{ contentTitle: "not-found-content.png", contentType: "png" }],
+      content: [
+        {
+          contentTitle: "not-found-content.png",
+          contentType: "png",
+          itemPathS3: "images/not-found-content.png",
+        },
+      ],
     },
   ]);
   const [content, setContent] = useState([
@@ -56,26 +58,36 @@ export const MyLearning = () => {
   const [selectedChapter, setSelectedChapter] = useState("");
 
   useEffect(() => {
+    console.log(propCourse)
+    // getAllCourses()
+    //   .then((res: Courses[]) => {
+    //     setCourse(res);
+    //     setIsLoading(false);
+    //   })
+    //   .catch((err: { message: string }) => console.error(err.message));
+
     fetch("./course-data/courses.json")
       .then((res) => res.json())
       .then((data) => {
         if (userData.id > -1) {
-          data.map((e: CourseContext) => {
-            if (e.courseName === userData.currentCourse.courseName) {
+          data.map((e: Courses) => {
+            const chosenCourse = propCourse === "" ? userData.currentCourse.courseName : propCourse
+            console.log(chosenCourse)
+            if (e.courseName === chosenCourse) {
               setCourse(e);
             }
           });
         }
       });
-  }, [userData]);
+  }, [propCourse, userData]);
 
   useEffect(() => {
     fetch("./course-data/chapters.json")
       .then((res) => res.json())
       .then((data) => {
         if (userData.id > -1) {
-          const tempChapters: ChapterContext[] = [];
-          data.map((dataElement: ChapterContext) => {
+          const tempChapters: Chapters[] = [];
+          data.map((dataElement: Chapters) => {
             course.chapters.map((courseElement) => {
               if (dataElement.chapterName === courseElement.chapterName) {
                 tempChapters.push(dataElement);
@@ -92,10 +104,10 @@ export const MyLearning = () => {
       .then((res) => res.json())
       .then((data) => {
         if (userData.id > -1) {
-          const tempSection: SectionContext[] = [];
+          const tempSection: Sections[] = [];
           chapters.map((chapterElement) => {
             chapterElement.sections.map((sectionsElement) => {
-              data.map((dataElement: SectionContext) => {
+              data.map((dataElement: Sections) => {
                 if (dataElement.sectionName === sectionsElement.sectionName) {
                   tempSection.push(dataElement);
                 }
@@ -236,151 +248,163 @@ export const MyLearning = () => {
   }
 
   return (
-    <div className="my-learning-background">
-      <Grid
-        container
-        rowSpacing={1}
-        sx={{
-          justifyContent: "center",
-          "@media only screen and (min-width: 900px)": {
-            justifyContent: "space-around",
-          },
-        }}
-      >
-        <Grid
-          size={{ xs: 11, md: 3 }}
-          sx={{
-            "@media only screen and (max-width: 900px)": {
-              display: "none",
-            },
-          }}
+    <>
+      {isLoading ? (
+        <Stack
+          spacing={2}
+          direction="row"
+          alignItems="center"
+          sx={{ width: "100vw", justifyContent: "center", height: "80vh" }}
         >
-          <SimpleTreeView
-            expandedItems={[selectedChapter]}
-            selectedItems={selectedSection}
-            disableSelection
-            slots={{
-              expandIcon: AddCircleOutlineIcon,
-              collapseIcon: RemoveCircleOutlineIcon,
-              endIcon: RemoveIcon,
-            }}
+          <CircularProgress size="20rem" />
+        </Stack>
+      ) : (
+        <div className="my-learning-background">
+          <Grid
+            container
+            rowSpacing={1}
             sx={{
-              paddingRight: "1vw",
-              "& .MuiTreeItem-content.Mui-selected ": {
-                backgroundColor: "rgb(197 227 99 / 50%)",
-              },
-            }}
-          >
-            {treeView()}
-          </SimpleTreeView>
-        </Grid>
-        <Grid size={{ xs: 11, md: 9 }}>
-          <Card
-            sx={{
-              height: "100%",
-              boxSizing: "border-box",
-              display: "flex",
-              alignItems: "center",
               justifyContent: "center",
-              flexDirection: "column",
-              padding: "0px 1vw",
-              background:
-                "linear-gradient(0.25turn, #93cddc, #bdedfa, #93cddc)",
-              boxShadow: "1px 3px 6px #9e9e9ebf",
-            }}
-          >
-            <Typography variant="h4">{selectedSection}</Typography>
-            {mediaType === "image" ? (
-              <CardMedia
-                component="img"
-                image={`./image/${mediaTitle}`}
-                sx={{
-                  width: "100%",
-                  height: "77vh",
-                  background: "#030303",
-                  border: "solid #030303",
-                  objectFit: "contain",
-                }}
-              />
-            ) : mediaType === "media" ? (
-              <CardMedia
-                image={`./video/${mediaTitle}`}
-                sx={{
-                  width: "100%",
-                  height: "77vh",
-                  background: "#030303",
-                  border: "solid #030303",
-                  backgroundPosition: "center",
-                  backgroundRepeat: "no-repeat",
-                  backgroundSize: "contain",
-                }}
-              />
-            ) : (
-              <CardMedia
-                component="video"
-                image={`./video/${mediaTitle}`}
-                autoPlay={true}
-                controls={true}
-                sx={{
-                  width: "100%",
-                  height: "77vh",
-                  background: "#030303",
-                  border: "solid #030303",
-                }}
-              />
-            )}
-            <div className="my-learning-buttons">
-              <CustomButton
-                disabled={currentLength === 1 ? true : false}
-                startIcon={<ArrowBackIosNewRoundedIcon />}
-                onClick={() => {
-                  buttonHandler("prevButton");
-                }}
-              >
-                Prev
-              </CustomButton>
-              <div className="divider"></div>
-              <CustomButton
-                disabled={currentLength === mediaLength ? true : false}
-                endIcon={<ArrowForwardIosRoundedIcon />}
-                onClick={() => {
-                  buttonHandler("nextButton");
-                }}
-              >
-                Next
-              </CustomButton>
-            </div>
-          </Card>
-        </Grid>
-        <Grid
-          size={{ xs: 11, md: 3 }}
-          sx={{
-            "@media only screen and (min-width: 900px)": {
-              display: "none",
-            },
-          }}
-        >
-          <SimpleTreeView
-            expandedItems={[selectedChapter]}
-            selectedItems={selectedSection}
-            disableSelection
-            slots={{
-              expandIcon: AddCircleOutlineIcon,
-              collapseIcon: RemoveCircleOutlineIcon,
-              endIcon: RemoveIcon,
-            }}
-            sx={{
-              paddingRight: "1vw",
-              "& .MuiTreeItem-content.Mui-selected ": {
-                backgroundColor: "rgb(197 227 99 / 50%)",
+              "@media only screen and (min-width: 900px)": {
+                justifyContent: "space-around",
               },
             }}
           >
-            {treeView()}
-          </SimpleTreeView>
-        </Grid>
-      </Grid>
-    </div>
+            <Grid
+              size={{ xs: 11, md: 3 }}
+              sx={{
+                "@media only screen and (max-width: 900px)": {
+                  display: "none",
+                },
+              }}
+            >
+              <SimpleTreeView
+                expandedItems={[selectedChapter]}
+                selectedItems={selectedSection}
+                disableSelection
+                slots={{
+                  expandIcon: AddCircleOutlineIcon,
+                  collapseIcon: RemoveCircleOutlineIcon,
+                  endIcon: RemoveIcon,
+                }}
+                sx={{
+                  paddingRight: "1vw",
+                  "& .MuiTreeItem-content.Mui-selected ": {
+                    backgroundColor: "rgb(197 227 99 / 50%)",
+                  },
+                }}
+              >
+                {treeView()}
+              </SimpleTreeView>
+            </Grid>
+            <Grid size={{ xs: 11, md: 9 }}>
+              <Card
+                sx={{
+                  height: "100%",
+                  boxSizing: "border-box",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  padding: "0px 1vw",
+                  backgroundColor: "#1b89ce",
+                  boxShadow: "1px 3px 6px #9e9e9ebf",
+                }}
+              >
+                <Typography variant="h4">{selectedSection}</Typography>
+                {mediaType === "image" ? (
+                  <CardMedia
+                    component="img"
+                    image={`./image/${mediaTitle}`}
+                    sx={{
+                      width: "100%",
+                      height: "77vh",
+                      background: "#030303",
+                      border: "solid #030303",
+                      objectFit: "contain",
+                    }}
+                  />
+                ) : mediaType === "media" ? (
+                  <CardMedia
+                    image={`./video/${mediaTitle}`}
+                    sx={{
+                      width: "100%",
+                      height: "77vh",
+                      background: "#030303",
+                      border: "solid #030303",
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "contain",
+                    }}
+                  />
+                ) : (
+                  <CardMedia
+                    component="video"
+                    image={`./video/${mediaTitle}`}
+                    autoPlay={true}
+                    controls={true}
+                    sx={{
+                      width: "100%",
+                      height: "77vh",
+                      background: "#030303",
+                      border: "solid #030303",
+                    }}
+                  />
+                )}
+                <div className="my-learning-buttons">
+                  <CustomButton
+                    disabled={currentLength === 1 ? true : false}
+                    startIcon={<ArrowBackIosNewRoundedIcon />}
+                    onClick={() => {
+                      buttonHandler("prevButton");
+                    }}
+                  >
+                    Prev
+                  </CustomButton>
+                  <div className="divider"></div>
+                  <CustomButton
+                    disabled={currentLength === mediaLength ? true : false}
+                    endIcon={<ArrowForwardIosRoundedIcon />}
+                    onClick={() => {
+                      buttonHandler("nextButton");
+                    }}
+                  >
+                    Next
+                  </CustomButton>
+                </div>
+              </Card>
+            </Grid>
+            <Grid
+              size={{ xs: 11, md: 3 }}
+              sx={{
+                "@media only screen and (min-width: 900px)": {
+                  display: "none",
+                },
+              }}
+            >
+              <SimpleTreeView
+                expandedItems={[selectedChapter]}
+                selectedItems={selectedSection}
+                disableSelection
+                slots={{
+                  expandIcon: AddCircleOutlineIcon,
+                  collapseIcon: RemoveCircleOutlineIcon,
+                  endIcon: RemoveIcon,
+                }}
+                sx={{
+                  paddingRight: "1vw",
+                  "& .MuiTreeItem-content.Mui-selected ": {
+                    backgroundColor: "rgb(197 227 99 / 50%)",
+                  },
+                }}
+              >
+                {treeView()}
+              </SimpleTreeView>
+            </Grid>
+          </Grid>
+        </div>
+      )}
+    </>
   );
 };
 

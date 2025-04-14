@@ -6,6 +6,10 @@
   padding-left: 1vw;
   padding-top: 2vh;
 }
-h3 {
+
+.header-button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1vh;
 }

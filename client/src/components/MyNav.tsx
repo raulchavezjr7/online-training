@@ -14,8 +14,13 @@ export const MyNav = ({ user }: { user: number }) => {
   const [anchorMenu, setAnchorMenu] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorMenu);
   const location = useLocation();
-  const showNav =
-    location.pathname === "/" || location.pathname.includes("/sign-in");
+  const notShowSignIn =
+    location.pathname.includes("/sign-in") ||
+    location.pathname.includes("/faq") ||
+    location.pathname.includes("/about-us") ||
+    location.pathname.includes("/terms-conditions") ||
+    location.pathname.includes("/privacy-policy");
+  const notShowNav = location.pathname === "/" || notShowSignIn;
   const [userData, setUserData] = useState({
     id: -1,
     email: "",
@@ -46,7 +51,7 @@ export const MyNav = ({ user }: { user: number }) => {
   };
 
   const smallMenu = () => {
-    return showNav ? (
+    return notShowNav ? (
       <div className="small-menu">
         <h3 className="app-brand">
           <div>
@@ -61,7 +66,7 @@ export const MyNav = ({ user }: { user: number }) => {
             </Link>
           </div>
         </h3>
-        {location.pathname.includes("sign-in") ? (
+        {notShowSignIn ? (
           <></>
         ) : (
           <CustomButton component={Link} to="/sign-in">
@@ -87,7 +92,7 @@ export const MyNav = ({ user }: { user: number }) => {
         <Button aria-haspopup="true" onClick={handleClick}>
           <MenuRoundedIcon
             style={{ fontSize: "xx-large" }}
-            sx={{ bgcolor: "#F59F00", color: "#030303" }}
+            sx={{ color: "#1b89ce" }}
           />
         </Button>
         <Menu
@@ -102,7 +107,7 @@ export const MyNav = ({ user }: { user: number }) => {
             </Link>
           </MenuItem>
           <MenuItem onClick={handleClose}>
-            <Link className="nav-link-small" to="/my-learning">
+            <Link className="nav-link-small" to={{pathname: "/my-learning"}}>
               My Learning
             </Link>
           </MenuItem>
@@ -126,7 +131,7 @@ export const MyNav = ({ user }: { user: number }) => {
   };
 
   const bigMenu = () => {
-    return showNav ? (
+    return notShowNav ? (
       <div className="link-container">
         <h3 className="app-brand">
           <div>
@@ -141,7 +146,7 @@ export const MyNav = ({ user }: { user: number }) => {
             </Link>
           </div>
         </h3>
-        {location.pathname.includes("sign-in") ? (
+        {notShowSignIn ? (
           <></>
         ) : (
           <CustomButton component={Link} to="/sign-in">
@@ -191,7 +196,7 @@ export const MyNav = ({ user }: { user: number }) => {
 
   return (
     <>
-      <AppBar sx={{ bgcolor: "#F59F00", color: "#030303" }}>
+      <AppBar sx={{ bgcolor: "#3d3d3d", color: "#030303" }}>
         <Toolbar>
           {smallMenu()}
           {bigMenu()}
@@ -205,12 +210,12 @@ export const MyNav = ({ user }: { user: number }) => {
 };
 
 const CustomButton = styled(Button)({
-  color: "#0f0f0f",
+  color: "#f7f9f6",
   fontFamily: '"Inter", sans-serif',
   fontOpticalSizing: "auto",
   fontStyle: "normal",
   fontSize: "inherit",
   "&:hover": {
-    backgroundColor: "#0f0f0f15",
+    backgroundColor: "#f7f9f615",
   },
 }) as typeof Button;

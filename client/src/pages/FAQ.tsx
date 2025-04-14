@@ -4,6 +4,9 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
+import { styled } from "@mui/material/styles";
+import Button from "@mui/material/Button";
+import { Link } from "react-router-dom";
 import "./FAQ.css";
 
 export const FAQ = () => {
@@ -19,13 +22,20 @@ export const FAQ = () => {
 
   return (
     <div className="faqBackground">
-      <h3>Frequently Asked Questions (FAQ)</h3>
+      <div className="header-button-container">
+        <div>
+          <h3>Frequently Asked Questions (FAQ)</h3>
+        </div>
+        <CustomButton component={Link} to="/home">
+          Home
+        </CustomButton>
+      </div>
       {faq.map((element, i) => {
         const question = element.question;
         const answer = element.answer;
         return (
           <Accordion
-          key={i}
+            key={i}
             style={{
               borderBottomColor: "#9E9E9E",
               boxShadow: "1px 3px 6px #9e9e9ebf",
@@ -33,7 +43,7 @@ export const FAQ = () => {
           >
             <AccordionSummary
               sx={{
-                backgroundColor: "#C5E363e5",
+                backgroundColor: "#1b89ce82",
               }}
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1-content"
@@ -55,3 +65,14 @@ export const FAQ = () => {
     </div>
   );
 };
+
+const CustomButton = styled(Button)({
+  color: "#0f0f0f",
+  backgroundColor: "#F59F00",
+  variant: "contained",
+  fontSize: "large",
+  fontFamily: "Inter, sans-serif",
+  "&:hover": {
+    backgroundColor: "#bd7d07",
+  },
+}) as typeof Button;

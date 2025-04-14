@@ -31,6 +31,7 @@ const ScrollToTop = ({ children }: { children: ReactNode }) => {
 
 function App() {
   const [user, setUser] = useState(-1);
+  const [course, setCourse] = useState("");
 
   return (
     <BrowserRouter>
@@ -44,12 +45,16 @@ function App() {
             ></Route>
             <Route
               path="home"
-              element={user === -1 ? <Navigate to="/" /> : <Home />}
+              element={user === -1 ? <Navigate to="/" /> : <Home setCourse={setCourse}/>}
             ></Route>
             <Route
-              path="my-learning"
+              path="my-learning/"
               element={
-                user === -1 ? <Navigate to="/" /> : <MyLearning />
+                user === -1 ? (
+                  <Navigate to="/" />
+                ) : (
+                  <MyLearning propCourse={course} />
+                )
               }
             ></Route>
             <Route
@@ -58,9 +63,7 @@ function App() {
             ></Route>
             <Route
               path="team-dashboard"
-              element={
-                user === -1 ? <Navigate to="/" /> : <TeamDashboard />
-              }
+              element={user === -1 ? <Navigate to="/" /> : <TeamDashboard />}
             ></Route>
             <Route path="about-us" element={<AboutUs />}></Route>
             <Route path="privacy-policy" element={<PrivacyPolicy />}></Route>
