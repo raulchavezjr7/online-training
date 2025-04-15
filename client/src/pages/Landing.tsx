@@ -128,7 +128,7 @@ export const Landing = () => {
                   <img
                     style={{ width: "inherit" }}
                     className="image"
-                    src={`${import.meta.env.VITE_AWS_Cloudfront}/${
+                    src={`${import.meta.env.VITE_AWS_CLOUDFRONT}/${
                       assets[0].itemPathS3
                     }`}
                     alt={assets[0].altName}
@@ -325,7 +325,7 @@ export const Landing = () => {
                   </CardContent>
                   <CardMedia
                     component="img"
-                    image={`${import.meta.env.VITE_AWS_Cloudfront}/${
+                    image={`${import.meta.env.VITE_AWS_CLOUDFRONT}/${
                       assets[1].itemPathS3
                     }`}
                     alt={assets[1].altName}
@@ -362,7 +362,7 @@ export const Landing = () => {
                   </CardContent>
                   <CardMedia
                     component="img"
-                    image={`${import.meta.env.VITE_AWS_Cloudfront}/${
+                    image={`${import.meta.env.VITE_AWS_CLOUDFRONT}/${
                       assets[2].itemPathS3
                     }`}
                     alt={assets[2].altName}

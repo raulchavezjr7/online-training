@@ -131,7 +131,7 @@ export const Home = ({
                           component="img"
                           height="140"
                           image={`${
-                            import.meta.env.VITE_AWS_Cloudfront
+                            import.meta.env.VITE_AWS_CLOUDFRONT
                           }/${getUrl(element.id, "path")}`}
                           alt={`${getUrl(element.id, "alt")}`}
                         />
@@ -169,7 +169,7 @@ export const Home = ({
                       <CardMedia
                         component="img"
                         height="140"
-                        image={`${import.meta.env.VITE_AWS_Cloudfront}/${getUrl(
+                        image={`${import.meta.env.VITE_AWS_CLOUDFRONT}/${getUrl(
                           element.id,
                           "path"
                         )}`}

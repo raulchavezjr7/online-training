@@ -15,141 +15,158 @@ import { TreeItem } from "@mui/x-tree-view/TreeItem";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { Courses, Chapters, Sections, getAllCourses } from "../api/content";
+import {
+  Courses,
+  Chapters,
+  Sections,
+  getAllCourses,
+  getAllChapters,
+  getAllSections,
+} from "../api/content";
 
-export const MyLearning = ({ propCourse }: { propCourse: "" }) => {
+export const MyLearning = ({ propCourse }: { propCourse: string }) => {
   const userData: UserContext = useOutletContext();
   const [isLoading, setIsLoading] = useState(true);
-  const [course, setCourse] = useState<Courses>({
-    id: 0,
-    courseName: "",
-    length: 0,
-    summary: "",
-    chapters: [
-      {
-        chapterName: "",
-        chapterLength: 0,
-      },
-    ],
-  });
+  // const [course, setCourse] = useState<Courses>({
+  //   id: 0,
+  //   courseName: "",
+  //   length: 0,
+  //   summary: "",
+  //   chapters: [
+  //     {
+  //       chapterName: "",
+  //       chapterLength: 0,
+  //     },
+  //   ],
+  // });
   const [chapters, setChapters] = useState<Chapters[]>([]);
-  const [section, setSection] = useState<Sections[]>([
+  const [sections, setSections] = useState<Sections[]>([
     {
       id: 1000000,
       sectionName: "content not found",
       length: 1,
       content: [
         {
-          contentTitle: "not-found-content.png",
+          contentTitle: "not-found-content",
           contentType: "png",
           itemPathS3: "images/not-found-content.png",
         },
       ],
     },
   ]);
-  const [content, setContent] = useState([
-    { contentTitle: "", contentType: "" },
+  const [contents, setContents] = useState([
+    { contentTitle: "", contentType: "", itemPathS3: "" },
   ]);
-  const [mediaTitle, setMediaTitle] = useState("not-found-content.png");
+  const [mediaUrl, setMediaUrl] = useState("images/not-found-content.png");
   const [mediaType, setMediaType] = useState("image");
-  const [mediaLength, setMediaLength] = useState(1);
+
   const [currentLength, setCurrentLength] = useState(1);
   const [selectedSection, setSelectedSection] = useState("");
   const [selectedChapter, setSelectedChapter] = useState("");
 
   useEffect(() => {
-    console.log(propCourse)
-    // getAllCourses()
-    //   .then((res: Courses[]) => {
-    //     setCourse(res);
-    //     setIsLoading(false);
-    //   })
-    //   .catch((err: { message: string }) => console.error(err.message));
-
-    fetch("./course-data/courses.json")
-      .then((res) => res.json())
-      .then((data) => {
+    console.log(userData);
+    console.log(propCourse);
+    getAllCourses()
+      .then((coursesRes: Courses[]) => {
         if (userData.id > -1) {
-          data.map((e: Courses) => {
-            const chosenCourse = propCourse === "" ? userData.currentCourse.courseName : propCourse
-            console.log(chosenCourse)
-            if (e.courseName === chosenCourse) {
-              setCourse(e);
+          coursesRes.map((coursesElement: Courses) => {
+            const chosenCourse =
+              propCourse === ""
+                ? userData.currentCourse.courseName
+                : propCourse;
+            if (coursesElement.courseName === chosenCourse) {
+              console.log(coursesElement);
+              // setCourse(coursesElement);
+              getAllChapters()
+                .then((chapterRes: Chapters[]) => {
+                  const tempChapters: Chapters[] = [];
+                  chapterRes.map((chapterResElement: Chapters) => {
+                    coursesElement.chapters.map((courseElement) => {
+                      if (
+                        chapterResElement.chapterName ===
+                        courseElement.chapterName
+                      ) {
+                        tempChapters.push(chapterResElement);
+                      }
+                    });
+                  });
+                  console.log(tempChapters);
+                  setChapters(tempChapters);
+                  getAllSections()
+                    .then((sectionRes: Sections[]) => {
+                      const tempSection: Sections[] = [];
+                      tempChapters.map((chapterElement) => {
+                        chapterElement.sections.map((sectionsElement) => {
+                          sectionRes.map((sectionResElement: Sections) => {
+                            if (
+                              sectionResElement.sectionName ===
+                              sectionsElement.sectionName
+                            ) {
+                              tempSection.push(sectionResElement);
+                            }
+                          });
+                        });
+                      });
+                      console.log(tempSection);
+                      setSections(tempSection);
+                      const sectionName =
+                        userData.currentCourse.courseName === propCourse
+                          ? userData.currentCourse.sectionName
+                          : tempChapters[tempChapters.length - 1].sections[
+                              tempChapters[tempChapters.length - 1].sections
+                                .length - 1
+                            ].sectionName;
+                      console.log(sectionName);
+                      tempSection.map((sectionElement) => {
+                        if (sectionElement.sectionName === sectionName) {
+                          console.log(sectionElement);
+                          setContents(sectionElement.content);
+                        }
+                      });
+                      const selectedChapter =
+                        userData.currentCourse.courseName === propCourse
+                          ? userData.currentCourse.chapterName
+                          : tempChapters[tempChapters.length - 1].chapterName;
+                      console.log(selectedChapter);
+                      setSelectedSection(sectionName);
+                      setSelectedChapter(selectedChapter);
+                    })
+                    .catch((err: { message: string }) =>
+                      console.error(err.message)
+                    )
+                    .then(() => {
+                      setTimeout(() => {
+                        setIsLoading(false);
+                      }, 2000);
+                    })
+                    .catch((err: { message: string }) =>
+                      console.error(err.message)
+                    );
+                })
+                .catch((err: { message: string }) =>
+                  console.error(err.message)
+                );
             }
           });
         }
-      });
+      })
+      .catch((err: { message: string }) => console.error(err.message));
   }, [propCourse, userData]);
 
   useEffect(() => {
-    fetch("./course-data/chapters.json")
-      .then((res) => res.json())
-      .then((data) => {
-        if (userData.id > -1) {
-          const tempChapters: Chapters[] = [];
-          data.map((dataElement: Chapters) => {
-            course.chapters.map((courseElement) => {
-              if (dataElement.chapterName === courseElement.chapterName) {
-                tempChapters.push(dataElement);
-              }
-            });
-          });
-          setChapters(tempChapters);
-        }
-      });
-  }, [userData, course]);
-
-  useEffect(() => {
-    fetch("./course-data/sections.json")
-      .then((res) => res.json())
-      .then((data) => {
-        if (userData.id > -1) {
-          const tempSection: Sections[] = [];
-          chapters.map((chapterElement) => {
-            chapterElement.sections.map((sectionsElement) => {
-              data.map((dataElement: Sections) => {
-                if (dataElement.sectionName === sectionsElement.sectionName) {
-                  tempSection.push(dataElement);
-                }
-              });
-            });
-          });
-          setSection(tempSection);
-        }
-      });
-  }, [userData, chapters]);
-
-  useEffect(() => {
-    const sectionName = userData.currentCourse.sectionName;
-    section.map((sectionElement) => {
-      if (sectionElement.sectionName === sectionName) {
-        setContent(sectionElement.content);
-        setMediaLength(sectionElement.length);
-      }
-    });
-  }, [userData, section]);
-
-  useEffect(() => {
     const length = currentLength - 1;
-    if (content[length].contentTitle !== "") {
-      setMediaTitle(
-        `${content[length].contentTitle}.${content[length].contentType}`
-      );
+    if (contents[length].contentTitle !== "") {
+      setMediaUrl(contents[length].itemPathS3);
     }
-
-    if (content[length].contentType === "mp4") {
+    if (contents[length].contentType === "mp4") {
       setMediaType("video");
-    } else if (content[length].contentType === "gif") {
+    } else if (contents[length].contentType === "gif") {
       setMediaType("media");
     } else {
       setMediaType("image");
     }
-  }, [content, currentLength]);
-
-  useEffect(() => {
-    setSelectedSection(userData.currentCourse.sectionName);
-    setSelectedChapter(userData.currentCourse.chapterName);
-  }, [userData]);
+  }, [contents, currentLength]);
 
   function buttonHandler(buttonType: string) {
     if (buttonType === "nextButton") {
@@ -174,16 +191,20 @@ export const MyLearning = ({ propCourse }: { propCourse: "" }) => {
         }
       });
     });
-    section.map((sectionElement) => {
+    sections.map((sectionElement) => {
       if (sectionElement.sectionName === element) {
         contentChanged = true;
-        setContent(sectionElement.content);
-        setMediaLength(sectionElement.length);
+        setContents(sectionElement.content);
       }
     });
     if (!contentChanged) {
-      setContent([{ contentTitle: "not-found-content", contentType: "png" }]);
-      setMediaLength(1);
+      setContents([
+        {
+          contentTitle: "not-found-content",
+          contentType: "png",
+          itemPathS3: "images/not-found-content.png",
+        },
+      ]);
     }
   }
 
@@ -315,7 +336,7 @@ export const MyLearning = ({ propCourse }: { propCourse: "" }) => {
                 {mediaType === "image" ? (
                   <CardMedia
                     component="img"
-                    image={`./image/${mediaTitle}`}
+                    image={`${import.meta.env.VITE_AWS_CLOUDFRONT}/${mediaUrl}`}
                     sx={{
                       width: "100%",
                       height: "77vh",
@@ -326,7 +347,7 @@ export const MyLearning = ({ propCourse }: { propCourse: "" }) => {
                   />
                 ) : mediaType === "media" ? (
                   <CardMedia
-                    image={`./video/${mediaTitle}`}
+                    image={`${import.meta.env.VITE_AWS_CLOUDFRONT}/${mediaUrl}`}
                     sx={{
                       width: "100%",
                       height: "77vh",
@@ -340,7 +361,7 @@ export const MyLearning = ({ propCourse }: { propCourse: "" }) => {
                 ) : (
                   <CardMedia
                     component="video"
-                    image={`./video/${mediaTitle}`}
+                    image={`${import.meta.env.VITE_AWS_CLOUDFRONT}/${mediaUrl}`}
                     autoPlay={true}
                     controls={true}
                     sx={{
@@ -363,7 +384,7 @@ export const MyLearning = ({ propCourse }: { propCourse: "" }) => {
                   </CustomButton>
                   <div className="divider"></div>
                   <CustomButton
-                    disabled={currentLength === mediaLength ? true : false}
+                    disabled={currentLength === contents.length ? true : false}
                     endIcon={<ArrowForwardIosRoundedIcon />}
                     onClick={() => {
                       buttonHandler("nextButton");

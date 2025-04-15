@@ -13,30 +13,30 @@ export interface UserContext {
   };
 }
 
-export interface CourseContext {
-  id: number;
-  courseName: string;
-  length: number;
-  summary: string;
-  chapters: [
-    {
-      chapterName: string;
-      chapterLength: number;
-    },
-    { chapterName: string; chapterLength: number }
-  ];
-}
+// export interface CourseContext {
+//   id: number;
+//   courseName: string;
+//   length: number;
+//   summary: string;
+//   chapters: [
+//     {
+//       chapterName: string;
+//       chapterLength: number;
+//     },
+//     { chapterName: string; chapterLength: number }
+//   ];
+// }
 
-export interface ChapterContext {
-  id: number;
-  chapterName: string;
-  length: number;
-  sections: [{ sectionName: string; sectionLength: number }];
-}
+// export interface ChapterContext {
+//   id: number;
+//   chapterName: string;
+//   length: number;
+//   sections: [{ sectionName: string; sectionLength: number }];
+// }
 
-export interface SectionContext {
-  id: number;
-  sectionName: string;
-  length: number;
-  content: [{ contentTitle: string; contentType: string, itemPathS3: string }];
-}
+// export interface SectionContext {
+//   id: number;
+//   sectionName: string;
+//   length: number;
+//   content: [{ contentTitle: string; contentType: string, itemPathS3: string }];
+// }
