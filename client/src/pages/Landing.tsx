@@ -10,7 +10,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import { SetStateAction, useEffect, useState } from "react";
 import { Asset, getAssetById } from "../api/assets";
-import CircularProgress from "@mui/material/CircularProgress";
+import { Loading } from "./Loading";
 
 export const Landing = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -46,14 +46,7 @@ export const Landing = () => {
   return (
     <>
       {isLoading ? (
-        <Stack
-          spacing={2}
-          direction="row"
-          alignItems="center"
-          sx={{ width: "100vw", justifyContent: "center", height: "80vh" }}
-        >
-          <CircularProgress size="20rem" />
-        </Stack>
+        <Loading />
       ) : (
         <div>
           <Box

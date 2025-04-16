@@ -3,12 +3,13 @@ import TextField from "@mui/material/TextField";
 import CardContent from "@mui/material/CardContent";
 import "./Profile.css";
 import { useOutletContext } from "react-router-dom";
-import { UserContext } from "../components/DataContext";
 import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
+import { User } from "../api/user";
 
 export const Profile = () => {
-  const userData: UserContext = useOutletContext();
+  const userData: User = useOutletContext();
+  //console.log(userData);
   return (
     <div className="profileBackground">
       <Card
@@ -26,14 +27,7 @@ export const Profile = () => {
           },
         }}
       >
-        <CardContent
-        // sx={{
-        //   display: "flex",
-        //   alignItems: "center",
-        //   justifyContent: "space-evenly",
-        //   flexWrap: "wrap",
-        // }}
-        >
+        <CardContent>
           <Grid container rowSpacing={3} columnSpacing={3} sx={{}}>
             <Grid size={{ xs: 11, md: 6 }}>
               <CustomTextField
@@ -135,16 +129,16 @@ const CustomTextField = styled(TextField)({
   },
   // focused color for input with variant='standard'
   "& .MuiInput-underline:after": {
-    borderBottomColor: "green"
+    borderBottomColor: "green",
   },
   // focused color for input with variant='filled'
   "& .MuiFilledInput-underline:after": {
-    borderBottomColor: "green"
+    borderBottomColor: "green",
   },
   // focused color for input with variant='outlined'
   "& .MuiOutlinedInput-root": {
     "&.Mui-focused fieldset": {
-      borderColor: "green"
-    }
-  }
+      borderColor: "green",
+    },
+  },
 }) as typeof TextField;

@@ -10,8 +10,6 @@ import { ReactNode, useLayoutEffect, useState } from "react";
 import { NotFound } from "./pages/NotFound";
 import { Landing } from "./pages/Landing";
 import { Home } from "./pages/Home";
-import { SignIn } from "./pages/SignIn";
-import { TeamDashboard } from "./pages/TeamDashboard";
 import { Profile } from "./pages/Profile";
 import { MyLearning } from "./pages/MyLearning";
 import { MyNav } from "./components/MyNav";
@@ -20,6 +18,8 @@ import { AboutUs } from "./pages/AboutUs";
 import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 import { TermsConditions } from "./pages/TermsConditions";
 import { FAQ } from "./pages/FAQ";
+import { useAuth } from "react-oidc-context";
+import { Loading } from "./pages/Loading";
 
 const ScrollToTop = ({ children }: { children: ReactNode }) => {
   const location = useLocation();
@@ -30,45 +30,49 @@ const ScrollToTop = ({ children }: { children: ReactNode }) => {
 };
 
 function App() {
-  const [user, setUser] = useState(0);
   const [course, setCourse] = useState("");
+  const { isAuthenticated, isLoading } = useAuth();
   return (
     <BrowserRouter>
       <ScrollToTop>
         <Routes>
-          <Route path="/" element={<MyNav user={user} />}>
+          <Route path="/" element={<MyNav />}>
             <Route index element={<Landing />}></Route>
-            <Route
-              path="sign-in"
-              element={<SignIn setUser={setUser} />}
-            ></Route>
             <Route
               path="home"
               element={
-                user === -1 ? (
-                  <Navigate to="/" />
-                ) : (
+                isLoading ? (
+                  <Loading />
+                ) : isAuthenticated ? (
                   <Home setCourse={setCourse} />
+                ) : (
+                  <Navigate to="/" />
                 )
               }
             ></Route>
             <Route
               path="my-learning/"
               element={
-                user === -1 ? (
-                  <Navigate to="/" />
-                ) : (
+                isLoading ? (
+                  <Loading />
+                ) : isAuthenticated ? (
                   <MyLearning propCourse={course} />
+                ) : (
+                  <Navigate to="/" />
                 )
               }
             ></Route>
             <Route
               path="profile"
-              element={user === -1 ? <Navigate to="/" /> : <Profile />}
-            ></Route>
-            <Route
-              path="team-dashboard"
-              element={user === -1 ? <Navigate to="/" /> : <TeamDashboard />}
+              element={
+                isLoading ? (
+                  <Loading />
+                ) : isAuthenticated ? (
+                  <Profile />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
             ></Route>
             <Route path="about-us" element={<AboutUs />}></Route>
             <Route path="privacy-policy" element={<PrivacyPolicy />}></Route>

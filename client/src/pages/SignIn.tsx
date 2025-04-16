@@ -1,15 +1,9 @@
-// import Button from "@mui/material/Button";
-// import { Link } from "react-router-dom";
+import Button from "@mui/material/Button";
+import { styled } from "@mui/material/styles";
 import { useAuth } from "react-oidc-context";
 
-export const SignIn = ({
-  setUser,
-}: {
-  setUser: React.Dispatch<React.SetStateAction<number>>;
-}) => {
-
+export const SignIn = () => {
   const auth = useAuth();
-console.log(auth)
   const signOutRedirect = () => {
     const clientId = import.meta.env.VITE_AWS_COGNITO_LOGOUT_ID;
     const logoutUri = import.meta.env.VITE_AWS_COGNITO_LOGOUT_URI;
@@ -20,7 +14,7 @@ console.log(auth)
   };
 
   if (auth.isLoading) {
-    return <div>Loading...</div>;
+    return <div></div>;
   }
 
   if (auth.error) {
@@ -29,81 +23,36 @@ console.log(auth)
 
   if (auth.isAuthenticated) {
     return (
-      <div>
-        <pre> Hello: {auth.user?.profile.email} </pre>
-        <pre> ID Token: {auth.user?.id_token} </pre>
-        <pre> Access Token: {auth.user?.access_token} </pre>
-        <pre> Refresh Token: {auth.user?.refresh_token} </pre>
-
-        <button onClick={() => auth.removeUser()}>Sign out</button>
-      </div>
+      <CustomButton
+        onClick={() => {
+          auth.removeUser().then(() => {
+            signOutRedirect();
+          });
+        }}
+      >
+        Sign Out
+      </CustomButton>
     );
   }
 
   return (
-    <div>
-      <button
-        onClick={() => {
-          setUser(0);
-          auth.signinRedirect();
-        }}
-      >
-        Sign in
-      </button>
-      <button onClick={() => signOutRedirect()}>Sign out</button>
-    </div>
+    <CustomButton
+      onClick={() => {
+        auth.signinRedirect();
+      }}
+    >
+      Sign In
+    </CustomButton>
   );
 };
 
-//   return (
-//     <div>
-//       <a href="#">login</a>
-//       SignIn
-//       <Button
-//         onClick={(e) => {
-//           setUser(parseInt((e.target as HTMLElement).innerText));
-//         }}
-//       >
-//         <Link className="nav-link-small" to="/home">
-//           0
-//         </Link>
-//       </Button>
-//       <Button
-//         onClick={(e) => {
-//           setUser(parseInt((e.target as HTMLElement).innerText));
-//         }}
-//       >
-//         <Link className="nav-link-small" to="/home">
-//           1
-//         </Link>
-//       </Button>
-//       <Button
-//         onClick={(e) => {
-//           setUser(parseInt((e.target as HTMLElement).innerText));
-//         }}
-//       >
-//         <Link className="nav-link-small" to="/home">
-//           2
-//         </Link>{" "}
-//       </Button>
-//       <Button
-//         onClick={(e) => {
-//           setUser(parseInt((e.target as HTMLElement).innerText));
-//         }}
-//       >
-//         <Link className="nav-link-small" to="/home">
-//           3
-//         </Link>
-//       </Button>
-//       <Button
-//         onClick={(e) => {
-//           setUser(parseInt((e.target as HTMLElement).innerText));
-//         }}
-//       >
-//         <Link className="nav-link-small" to="/home">
-//           4
-//         </Link>
-//       </Button>
-//     </div>
-//   );
-// };
+const CustomButton = styled(Button)({
+  color: "#f7f9f6",
+  fontFamily: '"Inter", sans-serif',
+  fontOpticalSizing: "auto",
+  fontStyle: "normal",
+  fontSize: "inherit",
+  "&:hover": {
+    backgroundColor: "#f7f9f615",
+  },
+}) as typeof Button;

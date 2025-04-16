@@ -6,11 +6,12 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import CardActionArea from "@mui/material/CardActionArea";
 import { Link, useOutletContext } from "react-router-dom";
-import { UserContext } from "../components/DataContext";
-import CircularProgress from "@mui/material/CircularProgress";
-import Stack from "@mui/material/Stack";
 import { Asset, getAllAssets } from "../api/assets";
 import { Courses, getAllCourses } from "../api/content";
+import { Loading } from "./Loading";
+import { User } from "../api/user";
+import { useAuth } from "react-oidc-context";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const Home = ({
   setCourse,
@@ -18,7 +19,10 @@ export const Home = ({
   setCourse: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const userData: UserContext = useOutletContext();
+  const userData: User = useOutletContext();
+  const auth = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [assets, setAssets] = useState<Asset[]>([
     {
       itemPathS3: "",
@@ -42,12 +46,19 @@ export const Home = ({
   ]);
 
   useEffect(() => {
-    getAllAssets()
+    const params = new URLSearchParams(location.search);
+    const hasCode = params.has("code");
+    const hasState = params.has("state");
+    if (!auth.isLoading && auth.isAuthenticated && (hasCode || hasState)) {
+      navigate("/home", { replace: true });
+    }
+    getAllAssets(auth.user!.id_token!)
       .then((res: Asset[]) => {
         setAssets(res);
-        getAllCourses()
+        getAllCourses(auth.user!.id_token!)
           .then((res: Courses[]) => {
-            setCourses(res);
+            const sortedCourses = res.sort((a, b) => a.id - b.id);
+            setCourses(sortedCourses);
             setIsLoading(false);
           })
           .catch((err: { message: string }) => console.error(err.message));
@@ -73,14 +84,7 @@ export const Home = ({
   return (
     <>
       {isLoading ? (
-        <Stack
-          spacing={2}
-          direction="row"
-          alignItems="center"
-          sx={{ width: "100vw", justifyContent: "center", height: "80vh" }}
-        >
-          <CircularProgress size="20rem" />
-        </Stack>
+        <Loading />
       ) : (
         <div className="homeBackground">
           <h1>Welcome, {userData.name}! </h1>
@@ -156,7 +160,7 @@ export const Home = ({
           <h2 className="courseType">Completed Courses</h2>
           <div className="cardContainer">
             {courses.map((element) => {
-              if (userData.completedCourses.includes(element.courseName)) {
+              if (userData.completeCourses.includes(element.courseName)) {
                 return (
                   <Card sx={{ maxWidth: 350 }} key={element.id}>
                     <CardActionArea

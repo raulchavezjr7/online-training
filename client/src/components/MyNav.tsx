@@ -9,38 +9,66 @@ import MenuItem from "@mui/material/MenuItem";
 import React, { useEffect, useState } from "react";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import { styled } from "@mui/material/styles";
+import { useAuth } from "react-oidc-context";
+import { SignIn } from "../pages/SignIn";
+import { getUserById, User } from "../api/user";
 
-export const MyNav = ({ user }: { user: number }) => {
+export const MyNav = () => {
   const [anchorMenu, setAnchorMenu] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorMenu);
   const location = useLocation();
+  const pagesAvailable =
+    location.pathname === "/home" ||
+    location.pathname === "/home/" ||
+    location.pathname === "/my-learning" ||
+    location.pathname === "/my-learning/" ||
+    location.pathname === "/profile" ||
+    location.pathname === "/profile/";
   const notShowSignIn =
-    location.pathname.includes("/sign-in") ||
-    location.pathname.includes("/faq") ||
-    location.pathname.includes("/about-us") ||
-    location.pathname.includes("/terms-conditions") ||
-    location.pathname.includes("/privacy-policy");
-  const notShowNav = location.pathname === "/" || notShowSignIn;
+    location.pathname === "/faq" ||
+      location.pathname === "/faq/" ||
+      location.pathname === "/about-us" ||
+      location.pathname === "/about-us/" ||
+      location.pathname === "/terms-conditions" ||
+      location.pathname === "/terms-conditions/" ||
+      location.pathname === "/privacy-policy" ||
+      location.pathname === "/privacy-policy/" 
+  const notShowNav = location.pathname === "/" || notShowSignIn ||  !pagesAvailable;
   const [userData, setUserData] = useState({
-    id: -1,
     email: "",
-    name: "",
     company: "",
+    name: "",
     supervisor: false,
     assignedCourses: [""],
-    completedCourses: [""],
-    currentCourses: [{ courseName: "", chapterName: "", sectionName: "" }],
+    completeCourses: [""],
+    currentCourse: {
+      chapterName: "",
+      courseName: "",
+      sectionName: "",
+    },
   });
+  const auth = useAuth();
 
   useEffect(() => {
-    fetch("./course-data/users.json")
-      .then((res) => res.json())
-      .then((data) => {
-        if (user !== -1) {
-          setUserData(data[user]);
-        }
-      });
-  }, [user]);
+    if (!auth.isLoading && auth.isAuthenticated) {
+      getUserById(
+        auth.user!.profile.email !== undefined ? auth.user!.profile.email : "",
+        auth.user!.id_token!
+      )
+        .then((res: User) => {
+          //console.log(res);
+          setUserData(res);
+        })
+        .catch((err: { message: string }) => console.error(err.message));
+    }
+    // fetch("./course-data/users.json")
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     if (user !== -1) {
+    //       setUserData(data[user]);
+    //     }
+    //   });
+  }, [auth]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorMenu(event.currentTarget);
@@ -66,13 +94,7 @@ export const MyNav = ({ user }: { user: number }) => {
             </Link>
           </div>
         </h3>
-        {notShowSignIn ? (
-          <></>
-        ) : (
-          <CustomButton component={Link} to="/sign-in">
-            Sign In
-          </CustomButton>
-        )}
+        {notShowSignIn ? <></> : <SignIn />}
       </div>
     ) : (
       <div className="small-menu">
@@ -107,7 +129,7 @@ export const MyNav = ({ user }: { user: number }) => {
             </Link>
           </MenuItem>
           <MenuItem onClick={handleClose}>
-            <Link className="nav-link-small" to={{pathname: "/my-learning"}}>
+            <Link className="nav-link-small" to={{ pathname: "/my-learning" }}>
               My Learning
             </Link>
           </MenuItem>
@@ -116,15 +138,11 @@ export const MyNav = ({ user }: { user: number }) => {
               Profile
             </Link>
           </MenuItem>
-          {userData.supervisor ? (
-            <MenuItem onClick={handleClose}>
-              <Link className="nav-link-small" to="/team-dashboard">
-                Team Dashboard
-              </Link>
-            </MenuItem>
-          ) : (
-            <span style={{ display: "none" }}></span>
-          )}
+          <MenuItem onClick={handleClose}>
+            <Link className="nav-link-small" to="./sign-in">
+              Sign Out
+            </Link>
+          </MenuItem>
         </Menu>
       </div>
     );
@@ -146,13 +164,7 @@ export const MyNav = ({ user }: { user: number }) => {
             </Link>
           </div>
         </h3>
-        {notShowSignIn ? (
-          <></>
-        ) : (
-          <CustomButton component={Link} to="/sign-in">
-            Sign In
-          </CustomButton>
-        )}
+        {notShowSignIn ? <></> : <SignIn />}
       </div>
     ) : (
       <div className="link-container">
@@ -179,16 +191,7 @@ export const MyNav = ({ user }: { user: number }) => {
           <CustomButton component={Link} to="/profile">
             Profile
           </CustomButton>
-          {userData.supervisor ? (
-            <CustomButton component={Link} to="/team-dashboard">
-              Team Dashboard
-            </CustomButton>
-          ) : (
-            <></>
-          )}
-          <CustomButton component={Link} to="/sign-in">
-            Sign In
-          </CustomButton>
+          <SignIn />
         </div>
       </div>
     );

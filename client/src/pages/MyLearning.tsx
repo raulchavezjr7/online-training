@@ -8,8 +8,7 @@ import Grid from "@mui/material/Grid";
 import CardMedia from "@mui/material/CardMedia";
 import Card from "@mui/material/Card";
 import { useOutletContext } from "react-router-dom";
-import { UserContext } from "../components/DataContext";
-import { CircularProgress, Stack, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { SimpleTreeView } from "@mui/x-tree-view/SimpleTreeView";
 import { TreeItem } from "@mui/x-tree-view/TreeItem";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
@@ -23,9 +22,13 @@ import {
   getAllChapters,
   getAllSections,
 } from "../api/content";
+import { Loading } from "./Loading";
+import { User } from "../api/user";
+import { useAuth } from "react-oidc-context";
 
 export const MyLearning = ({ propCourse }: { propCourse: string }) => {
-  const userData: UserContext = useOutletContext();
+  const userData: User = useOutletContext();
+  const auth = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   // const [course, setCourse] = useState<Courses>({
   //   id: 0,
@@ -64,92 +67,97 @@ export const MyLearning = ({ propCourse }: { propCourse: string }) => {
   const [selectedSection, setSelectedSection] = useState("");
   const [selectedChapter, setSelectedChapter] = useState("");
 
+  function getSortKey(id: number, denom: number): number {
+    return Math.floor(id / denom);
+  }
+
   useEffect(() => {
-    console.log(userData);
-    console.log(propCourse);
-    getAllCourses()
+    // console.log(userData);
+    // console.log(propCourse);
+    getAllCourses(auth.user!.id_token!)
       .then((coursesRes: Courses[]) => {
-        if (userData.id > -1) {
-          coursesRes.map((coursesElement: Courses) => {
-            const chosenCourse =
-              propCourse === ""
-                ? userData.currentCourse.courseName
-                : propCourse;
-            if (coursesElement.courseName === chosenCourse) {
-              console.log(coursesElement);
-              // setCourse(coursesElement);
-              getAllChapters()
-                .then((chapterRes: Chapters[]) => {
-                  const tempChapters: Chapters[] = [];
-                  chapterRes.map((chapterResElement: Chapters) => {
-                    coursesElement.chapters.map((courseElement) => {
-                      if (
-                        chapterResElement.chapterName ===
-                        courseElement.chapterName
-                      ) {
-                        tempChapters.push(chapterResElement);
-                      }
-                    });
+        coursesRes.map((coursesElement: Courses) => {
+          const chosenCourse =
+            propCourse === "" ? userData.currentCourse.courseName : propCourse;
+          if (coursesElement.courseName === chosenCourse) {
+            //console.log(coursesElement);
+            //setCourse(coursesElement);
+            getAllChapters(auth.user!.id_token!)
+              .then((chapterRes: Chapters[]) => {
+                const tempChapters: Chapters[] = [];
+                chapterRes.map((chapterResElement: Chapters) => {
+                  coursesElement.chapters.map((courseElement) => {
+                    if (
+                      chapterResElement.chapterName ===
+                      courseElement.chapterName
+                    ) {
+                      tempChapters.push(chapterResElement);
+                    }
                   });
-                  console.log(tempChapters);
-                  setChapters(tempChapters);
-                  getAllSections()
-                    .then((sectionRes: Sections[]) => {
-                      const tempSection: Sections[] = [];
-                      tempChapters.map((chapterElement) => {
-                        chapterElement.sections.map((sectionsElement) => {
-                          sectionRes.map((sectionResElement: Sections) => {
-                            if (
-                              sectionResElement.sectionName ===
-                              sectionsElement.sectionName
-                            ) {
-                              tempSection.push(sectionResElement);
-                            }
-                          });
+                });
+                const sortedChapters = tempChapters.sort(
+                  (a, b) => getSortKey(a.id, 1000) - getSortKey(b.id, 1000)
+                );
+                //console.log(sortedChapters);
+                setChapters(sortedChapters);
+                getAllSections(auth.user!.id_token!)
+                  .then((sectionRes: Sections[]) => {
+                    const tempSection: Sections[] = [];
+                    sortedChapters.map((chapterElement) => {
+                      chapterElement.sections.map((sectionsElement) => {
+                        sectionRes.map((sectionResElement: Sections) => {
+                          if (
+                            sectionResElement.sectionName ===
+                            sectionsElement.sectionName
+                          ) {
+                            tempSection.push(sectionResElement);
+                          }
                         });
                       });
-                      console.log(tempSection);
-                      setSections(tempSection);
-                      const sectionName =
-                        userData.currentCourse.courseName === propCourse
-                          ? userData.currentCourse.sectionName
-                          : tempChapters[tempChapters.length - 1].sections[
-                              tempChapters[tempChapters.length - 1].sections
-                                .length - 1
-                            ].sectionName;
-                      console.log(sectionName);
-                      tempSection.map((sectionElement) => {
-                        if (sectionElement.sectionName === sectionName) {
-                          console.log(sectionElement);
-                          setContents(sectionElement.content);
-                        }
-                      });
-                      const selectedChapter =
-                        userData.currentCourse.courseName === propCourse
-                          ? userData.currentCourse.chapterName
-                          : tempChapters[tempChapters.length - 1].chapterName;
-                      console.log(selectedChapter);
-                      setSelectedSection(sectionName);
-                      setSelectedChapter(selectedChapter);
-                    })
-                    .catch((err: { message: string }) =>
-                      console.error(err.message)
-                    )
-                    .then(() => {
-                      setTimeout(() => {
-                        setIsLoading(false);
-                      }, 2000);
-                    })
-                    .catch((err: { message: string }) =>
-                      console.error(err.message)
+                    });
+                    const sortedSections = tempSection.sort(
+                      (a, b) =>
+                        getSortKey(a.id, 1000000) - getSortKey(b.id, 1000000)
                     );
-                })
-                .catch((err: { message: string }) =>
-                  console.error(err.message)
-                );
-            }
-          });
-        }
+                    //console.log(sortedSections);
+                    setSections(sortedSections);
+                    const sectionName =
+                      userData.currentCourse.courseName === chosenCourse
+                        ? userData.currentCourse.sectionName
+                        : sortedChapters[sortedChapters.length - 1].sections[
+                            sortedChapters[sortedChapters.length - 1].sections
+                              .length - 1
+                          ].sectionName;
+                    // console.log(sectionName);
+                    sortedSections.map((sectionElement) => {
+                      if (sectionElement.sectionName === sectionName) {
+                        //console.log(sectionElement);
+                        setContents(sectionElement.content);
+                      }
+                    });
+                    const selectedChapter =
+                      userData.currentCourse.courseName === chosenCourse
+                        ? userData.currentCourse.chapterName
+                        : sortedChapters[sortedChapters.length - 1].chapterName;
+                    //console.log(selectedChapter);
+                    setSelectedSection(sectionName);
+                    setSelectedChapter(selectedChapter);
+                  })
+                  .catch((err: { message: string }) =>
+                    console.error(err.message)
+                  )
+                  .then(() => {
+                    setTimeout(() => {
+                      setIsLoading(false);
+                    }, 2000);
+                  })
+                  .catch((err: { message: string }) =>
+                    console.error(err.message)
+                  );
+              })
+              .catch((err: { message: string }) => console.error(err.message));
+          }
+        });
       })
       .catch((err: { message: string }) => console.error(err.message));
   }, [propCourse, userData]);
@@ -271,14 +279,7 @@ export const MyLearning = ({ propCourse }: { propCourse: string }) => {
   return (
     <>
       {isLoading ? (
-        <Stack
-          spacing={2}
-          direction="row"
-          alignItems="center"
-          sx={{ width: "100vw", justifyContent: "center", height: "80vh" }}
-        >
-          <CircularProgress size="20rem" />
-        </Stack>
+        <Loading />
       ) : (
         <div className="my-learning-background">
           <Grid
