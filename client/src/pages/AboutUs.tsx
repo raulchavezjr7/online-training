@@ -1,6 +1,7 @@
 import Card from "@mui/material/Card";
 import "./AboutUs.css";
 import { CardContent, CardMedia, Grid } from "@mui/material";
+import { Form } from "../components/Form";
 
 export const AboutUs = () => {
   const textCard = {
@@ -229,6 +230,7 @@ export const AboutUs = () => {
             Contact us today to learn more about how VetTech Academy can help
             your veterinary technicians grow and succeed.
           </p>
+          <Form buttonText="Contact Us for More Information"/>
         </Grid>
       </Grid>
     </div>

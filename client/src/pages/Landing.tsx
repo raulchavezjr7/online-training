@@ -2,8 +2,6 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -11,6 +9,7 @@ import CardMedia from "@mui/material/CardMedia";
 import { SetStateAction, useEffect, useState } from "react";
 import { Asset, getAssetById } from "../api/assets";
 import { Loading } from "./Loading";
+import { Form } from "../components/Form";
 
 export const Landing = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -96,9 +95,7 @@ export const Landing = () => {
                       The Complete Resource for Veterinary Clinics to Support
                       and Develop Their Vet Techs/Assts.
                     </Typography>
-                    <CustomButton variant="contained" onClick={() => {}}>
-                      Start Your Team's Training Journey
-                    </CustomButton>
+                    <Form buttonText="Start Your Team's Training Journey"/>
                   </Stack>
                 </Container>
               </Grid>
@@ -397,7 +394,7 @@ export const Landing = () => {
               with a powerful tool to enhance their knowledge and boost their
               confidence in the field.
             </Typography>
-            <CustomButton>Contact Us for More Information</CustomButton>
+            <Form buttonText="Contact Us for More Information"/>
           </Box>
         </div>
       )}
@@ -405,13 +402,3 @@ export const Landing = () => {
   );
 };
 
-const CustomButton = styled(Button)({
-  color: "#0f0f0f",
-  backgroundColor: "#F59F00",
-  variant: "contained",
-  fontSize: "large",
-  fontFamily: "Inter, sans-serif",
-  "&:hover": {
-    backgroundColor: "#bd7d07",
-  },
-}) as typeof Button;

@@ -64,7 +64,13 @@ export const Home = ({
           .catch((err: { message: string }) => console.error(err.message));
       })
       .catch((err: { message: string }) => console.error(err.message));
-  }, []);
+  }, [
+    auth.isAuthenticated,
+    auth.isLoading,
+    auth.user,
+    location.search,
+    navigate,
+  ]);
 
   function getUrl(id: number, type: string) {
     const checkValue = assets.find((element) =>
