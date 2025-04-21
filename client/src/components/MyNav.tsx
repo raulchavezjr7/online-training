@@ -13,7 +13,7 @@ import { useAuth } from "react-oidc-context";
 import { SignIn } from "../pages/SignIn";
 import { getUserById, User } from "../api/user";
 
-export const MyNav = () => {
+export const MyNav = ({ updateUserData }: { updateUserData: number }) => {
   const [anchorMenu, setAnchorMenu] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorMenu);
   const location = useLocation();
@@ -26,14 +26,15 @@ export const MyNav = () => {
     location.pathname === "/profile/";
   const notShowSignIn =
     location.pathname === "/faq" ||
-      location.pathname === "/faq/" ||
-      location.pathname === "/about-us" ||
-      location.pathname === "/about-us/" ||
-      location.pathname === "/terms-conditions" ||
-      location.pathname === "/terms-conditions/" ||
-      location.pathname === "/privacy-policy" ||
-      location.pathname === "/privacy-policy/" 
-  const notShowNav = location.pathname === "/" || notShowSignIn ||  !pagesAvailable;
+    location.pathname === "/faq/" ||
+    location.pathname === "/about-us" ||
+    location.pathname === "/about-us/" ||
+    location.pathname === "/terms-conditions" ||
+    location.pathname === "/terms-conditions/" ||
+    location.pathname === "/privacy-policy" ||
+    location.pathname === "/privacy-policy/";
+  const notShowNav =
+    location.pathname === "/" || notShowSignIn || !pagesAvailable;
   const [userData, setUserData] = useState({
     email: "",
     company: "",
@@ -61,14 +62,7 @@ export const MyNav = () => {
         })
         .catch((err: { message: string }) => console.error(err.message));
     }
-    // fetch("./course-data/users.json")
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     if (user !== -1) {
-    //       setUserData(data[user]);
-    //     }
-    //   });
-  }, [auth]);
+  }, [auth, updateUserData]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorMenu(event.currentTarget);

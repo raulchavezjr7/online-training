@@ -54,7 +54,7 @@ export const Footer = () => {
         </CustomIconButton>
       </div>
       <div className="contact-info">
-        <div>Email: contact@example.com</div>
+        <div>Email: raulchavezjr7@gmail.com</div>
         {" | "}
         <div>Phone: (555) 123-4567</div>
       </div>

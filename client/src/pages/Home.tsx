@@ -96,72 +96,90 @@ export const Home = ({
           <h1>Welcome, {userData.name}! </h1>
           <h2 className="courseType">My Courses</h2>
           <div className="cardContainer">
-            {courses.map((element) => {
-              if (userData.assignedCourses.includes(element.courseName)) {
-                let color = "none";
-                let type = "none";
-                if (element.courseName === userData.currentCourse.courseName) {
-                  type = "solid";
-                  color = "#f59f00";
-                }
-                return (
-                  <Tooltip
-                    key={element.id}
-                    placement="top"
-                    title={
-                      element.courseName !== userData.currentCourse.courseName
-                        ? `You must finish ${userData.currentCourse.courseName} before continuing to this course.`
-                        : ""
+            {userData.assignedCourses.length === 0 ? (
+              <Typography variant="h4" sx={{ color: "#1b89ce" }}>
+                Congratulations you have completed all assigned Courses!!!
+              </Typography>
+            ) : (
+              <>
+                {courses.map((element) => {
+                  if (userData.assignedCourses.includes(element.courseName)) {
+                    let color = "none";
+                    let type = "none";
+                    if (
+                      element.courseName === userData.currentCourse.courseName
+                    ) {
+                      type = "solid";
+                      color = "#f59f00";
                     }
-                  >
-                    <Card
-                      sx={{
-                        maxWidth: 350,
-                        border: "var(--b)",
-                        borderColor: "var(--bc)",
-                      }}
-                      style={
-                        { "--b": type, "--bc": color } as React.CSSProperties
-                      }
-                    >
-                      <CardActionArea
-                        disabled={
+                    return (
+                      <Tooltip
+                        key={element.id}
+                        placement="top"
+                        title={
                           element.courseName !==
                           userData.currentCourse.courseName
-                            ? true
-                            : false
+                            ? `You must finish ${userData.currentCourse.courseName} before continuing to this course.`
+                            : ""
                         }
-                        component={Link}
-                        to="/my-learning"
-                        onClick={() => {
-                          setCourse(element.courseName);
-                        }}
                       >
-                        <CardMedia
-                          component="img"
-                          height="140"
-                          image={`${
-                            import.meta.env.VITE_AWS_CLOUDFRONT
-                          }/${getUrl(element.id, "path")}`}
-                          alt={`${getUrl(element.id, "alt")}`}
-                        />
-                        <CardContent>
-                          <Typography gutterBottom variant="h5" component="div">
-                            {element.courseName}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            sx={{ color: "text.secondary" }}
+                        <Card
+                          sx={{
+                            maxWidth: 350,
+                            border: "var(--b)",
+                            borderColor: "var(--bc)",
+                          }}
+                          style={
+                            {
+                              "--b": type,
+                              "--bc": color,
+                            } as React.CSSProperties
+                          }
+                        >
+                          <CardActionArea
+                            disabled={
+                              element.courseName !==
+                              userData.currentCourse.courseName
+                                ? true
+                                : false
+                            }
+                            component={Link}
+                            to="/my-learning"
+                            onClick={() => {
+                              setCourse(element.courseName);
+                            }}
                           >
-                            {element.summary}
-                          </Typography>
-                        </CardContent>
-                      </CardActionArea>
-                    </Card>
-                  </Tooltip>
-                );
-              }
-            })}
+                            <CardMedia
+                              component="img"
+                              height="140"
+                              image={`${
+                                import.meta.env.VITE_AWS_CLOUDFRONT
+                              }/${getUrl(element.id, "path")}`}
+                              alt={`${getUrl(element.id, "alt")}`}
+                            />
+                            <CardContent>
+                              <Typography
+                                gutterBottom
+                                variant="h5"
+                                component="div"
+                              >
+                                {element.courseName}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                sx={{ color: "text.secondary" }}
+                              >
+                                {element.summary}
+                              </Typography>
+                            </CardContent>
+                          </CardActionArea>
+                        </Card>
+                      </Tooltip>
+                    );
+                  }
+                })}
+              </>
+            )}
           </div>
           <h2 className="courseType">Completed Courses</h2>
           <div className="cardContainer">

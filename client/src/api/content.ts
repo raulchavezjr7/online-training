@@ -18,6 +18,11 @@ export interface Sections {
   content: [{ contentTitle: string; contentType: string; itemPathS3: string }];
 }
 
+export interface Quizzes {
+  sectionName: string;
+  questions: [{ answer: string; options: string[]; question: string }];
+}
+
 const API_URL = import.meta.env.VITE_AWS_API_ASSETS;
 
 export const getAllCourses = async (token: string): Promise<Courses[]> => {
@@ -109,6 +114,37 @@ export const getSectionsById = async (
   });
   if (!response.ok) {
     throw new Error("sections not found");
+  }
+  return response.json();
+};
+
+export const getAllQuizzes = async (token: string): Promise<Quizzes[]> => {
+  const response = await fetch(`${API_URL}/quiz`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch quizzes");
+  }
+  return response.json();
+};
+
+export const getQuizzesById = async (
+  id: string,
+  token: string
+): Promise<Quizzes> => {
+  const response = await fetch(`${API_URL}/quiz/${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error("courses not found");
   }
   return response.json();
 };

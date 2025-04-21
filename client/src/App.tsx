@@ -32,11 +32,12 @@ const ScrollToTop = ({ children }: { children: ReactNode }) => {
 function App() {
   const [course, setCourse] = useState("");
   const { isAuthenticated, isLoading } = useAuth();
+  const [ updateGlobalUserData, setUpdateGlobalUserData ] = useState(0);
   return (
     <BrowserRouter>
       <ScrollToTop>
         <Routes>
-          <Route path="/" element={<MyNav />}>
+          <Route path="/" element={<MyNav updateUserData={updateGlobalUserData} />}>
             <Route index element={<Landing />}></Route>
             <Route
               path="home"
@@ -56,7 +57,7 @@ function App() {
                 isLoading ? (
                   <Loading />
                 ) : isAuthenticated ? (
-                  <MyLearning propCourse={course} />
+                  <MyLearning propCourse={course} updateUserData={setUpdateGlobalUserData} userDataStatus={updateGlobalUserData}/>
                 ) : (
                   <Navigate to="/" />
                 )

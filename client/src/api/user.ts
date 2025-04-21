@@ -3,8 +3,8 @@ export interface User {
   company: string;
   name: string;
   supervisor: boolean;
-  assignedCourses: [string];
-  completeCourses: [string];
+  assignedCourses: string[];
+  completeCourses: string[];
   currentCourse: {
     chapterName: string;
     courseName: string;
